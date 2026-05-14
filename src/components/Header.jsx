@@ -89,7 +89,7 @@ function Header() {
 
             {/* Forecast Cards */}
             {view === "week" && (
-                <div className="grid grid-cols-5 gap-4">
+                <div className="grid md:grid-cols-5 grid-cols-3 gap-4">
                     {forecastData.map((item, index) => (
                         <div
                             key={index}

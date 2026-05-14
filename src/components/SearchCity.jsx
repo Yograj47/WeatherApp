@@ -2,17 +2,10 @@ import { useState } from "react";
 import { LocateFixed, Search } from "lucide-react";
 import useWeatherStore from "../stores/weatherStore";
 import getLocation from "../utils/GetLocation";
+import Select from "react-select";
 
 function SearchCity() {
-    const [city, setCity] = useState("");
     const { setManualLocation, setGeoLocation, setLoading, setError } = useWeatherStore();
-
-    const submitManual = () => {
-        const trimmed = city.trim();
-        if (!trimmed) return;
-        setManualLocation(trimmed);
-        setCity("");
-    };
 
     const handleGeo = async () => {
         try {
@@ -26,18 +19,46 @@ function SearchCity() {
         }
     };
 
+    const handleOnChangeCity = (selectedOption) => {
+        console.log(selectedOption);
+        setManualLocation(selectedOption.value.trim())
+    }
+
+    const nepalCityOptions = [
+        { value: 'Kathmandu', label: 'Kathmandu' },
+        { value: 'Pokhara', label: 'Pokhara' },
+        { value: 'Biratnagar', label: 'Biratnagar' },
+        { value: 'Bharatpur', label: 'Bharatpur' },
+        { value: 'Lalitpur', label: 'Lalitpur' },
+        { value: 'Birgunj', label: 'Birgunj' },
+        { value: 'Dharan', label: 'Dharan' },
+        { value: 'Bhadgaon', label: 'Bhadgaon' },
+        { value: 'Bhaktapur', label: 'Bhaktapur' },
+        { value: 'Dhangadhi', label: 'Dhangadhi' },
+        { value: 'Nepalgunj', label: 'Nepalgunj' },
+        { value: 'Birendranagar', label: 'Birendranagar' },
+        { value: 'Hetauda', label: 'Hetauda' },
+        { value: 'Butwal', label: 'Butwal' },
+        { value: 'Itahari', label: 'Itahari' },
+        { value: 'Tulsipur', label: 'Tulsipur' },
+        { value: 'Janakpur', label: 'Janakpur' },
+        { value: 'Dadeldhura', label: 'Dadeldhura' },
+        { value: 'Dipayal', label: 'Dipayal' },
+        { value: 'Simara', label: 'Simara' },
+        { value: 'Okhaldhunga', label: 'Okhaldhunga' },
+        { value: 'Taplejung', label: 'Taplejung' },
+        { value: 'Dhankuta', label: 'Dhankuta' },
+        { value: 'Jomsom', label: 'Jomsom' },
+        { value: 'Lumle', label: 'Lumle' }
+    ];
+
     return (
         <div className="flex items-center w-full gap-4">
-            <div className="flex items-center flex-1 ring-zinc-500 ring-1 p-1 rounded-lg">
-                <Search size={18} className="text-black mr-3" strokeWidth={2.5} />
-                <input
-                    type="text"
-                    placeholder="Search for places..."
-                    aria-label="Search for places"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') submitManual(); }}
-                    className="w-full bg-transparent outline-none text-base font-medium placeholder:text-gray-400 text-black"
+            <div className="flex items-center flex-1">
+                <Select
+                    options={nepalCityOptions}
+                    onChange={handleOnChangeCity}
+                    className="w-full"
                 />
             </div>
 

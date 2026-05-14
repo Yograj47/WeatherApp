@@ -40,12 +40,12 @@ function Home() {
     }, [cityOrCoords, setError]);
 
     return (
-        <div className="h-screen w-full flex overflow-hidden font-sans antialiased">
-            <aside className="w-[25%] xl:w-[20%] h-full bg-white p-4 border-r border-gray-200">
+        <div className="h-screen w-full font-sans antialiased grid grid-cols-7">
+            <aside className="col-span-7 md:col-span-2 h-full bg-white p-4 border-r border-gray-200">
                 <Sidebar />
             </aside>
 
-            <main className="flex-1 h-full bg-[#F6F6F8] p-6">
+            <main className="col-span-7 md:col-span-5 h-full bg-[#F6F6F8] p-6">
                 <MainContent />
             </main>
         </div>
