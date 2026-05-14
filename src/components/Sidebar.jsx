@@ -11,9 +11,9 @@ function Sidebar() {
     const { time, day } = formatDateTime(weather.dt, weather.timezone);
 
     return (
-        <div className="flex h-full flex-col items-center px-6 py-4">
+        <div className="flex h-full flex-col items-center px-6 md:py-4 py-0">
             {/* Search */}
-            <div className="mb-8 w-full">
+            <div className="md:mb-8 mb-0 w-full">
                 <SearchCity />
             </div>
 
@@ -63,10 +63,7 @@ function Sidebar() {
 
             {/* City Card */}
             <div className="relative mt-8 h-24 w-full overflow-hidden rounded-3xl shadow-sm">
-                <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: "url('/bg1.jpg')" }}
-                />
+                <img src="https://images.unsplash.com/photo-1589800463007-3be49fe18b92?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                     <span className="text-sm font-semibold tracking-wide text-white">
                         {location?.value}
