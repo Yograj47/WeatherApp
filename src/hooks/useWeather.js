@@ -8,6 +8,10 @@ import {
     mapCurrentWeather,
     mapForecast,
 } from "../features/weather/weatherMapper";
+import {
+    get as getCachedWeather,
+    set as setCachedWeather,
+} from "../features/weather/weatherCache";
 
 export default function useWeather(query) {
     const {
@@ -24,6 +28,22 @@ export default function useWeather(query) {
         setError(null);
 
         try {
+            // -----------------------------
+            // 1. Check cache
+            // -----------------------------
+
+            const cachedData = getCachedWeather(query);
+
+            if (cachedData) {
+                setWeather(cachedData.weather);
+                setForecast(cachedData.forecast);
+                return;
+            }
+
+            // -----------------------------
+            // 2. Build API query
+            // -----------------------------
+
             const params =
                 typeof query === "string"
                     ? { q: query }
@@ -32,18 +52,44 @@ export default function useWeather(query) {
                         lon: query.lon,
                     };
 
+            // -----------------------------
+            // 3. Fetch API
+            // -----------------------------
+
             const [weatherData, forecastData] = await Promise.all([
                 getCurrentWeather(params),
                 getForecast(params),
             ]);
 
-            const mappedWeather = mapCurrentWeather(weatherData);
-            const mappedForecast = mapForecast(forecastData);
+            // -----------------------------
+            // 4. Normalize API response
+            // -----------------------------
+
+            const mappedWeather =
+                mapCurrentWeather(weatherData);
+
+            const mappedForecast =
+                mapForecast(forecastData);
+
+            // -----------------------------
+            // 5. Cache normalized data
+            // -----------------------------
+
+            setCachedWeather(query, {
+                weather: mappedWeather,
+                forecast: mappedForecast,
+            });
+
+            // -----------------------------
+            // 6. Update application state
+            // -----------------------------
 
             setWeather(mappedWeather);
             setForecast(mappedForecast);
         } catch (err) {
-            setError(err.message || "Failed to fetch weather");
+            setError(
+                err.message || "Failed to fetch weather"
+            );
         } finally {
             setLoading(false);
         }
