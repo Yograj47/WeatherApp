@@ -4,6 +4,10 @@ import {
     getCurrentWeather,
     getForecast,
 } from "../services/openWeatherApi";
+import {
+    mapCurrentWeather,
+    mapForecast,
+} from "../features/weather/weatherMapper";
 
 export default function useWeather(query) {
     const {
@@ -33,8 +37,11 @@ export default function useWeather(query) {
                 getForecast(params),
             ]);
 
-            setWeather(weatherData);
-            setForecast(forecastData);
+            const mappedWeather = mapCurrentWeather(weatherData);
+            const mappedForecast = mapForecast(forecastData);
+
+            setWeather(mappedWeather);
+            setForecast(mappedForecast);
         } catch (err) {
             setError(err.message || "Failed to fetch weather");
         } finally {
