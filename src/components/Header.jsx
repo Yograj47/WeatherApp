@@ -1,39 +1,35 @@
-import { useEffect, useState } from "react";
-// import usePreferences from "../stores/usePreferences";
+import { useMemo, useState } from "react";
 import useWeatherStore from "../stores/weatherStore";
 
 function Header() {
-    // const { unit, setUnit, isDarkMode, toggleDark } = usePreferences();
     const { forecast } = useWeatherStore();
     const weatherIconApi = import.meta.env.VITE_WEATHER_API_ICON;
-    console.log(weatherIconApi);
-    
+    const [view, setView] = useState("week"); 
 
-    const [forecastData, setForecastData] = useState([]);
-    const [view, setView] = useState("week"); // UI toggle only
-
-    useEffect(() => {
-        if (!forecast?.list) return;
+    const forecastData = useMemo(() => {
+        if (!forecast?.list) return [];
 
         const daily = [];
 
-        // 5-day limit (API constraint)
         for (let i = 0; i < 5; i++) {
             const index = i * 8;
             const data = forecast.list[index];
+
             if (!data) continue;
 
             const date = new Date(data.dt * 1000);
 
             daily.push({
-                day: date.toLocaleDateString("en-US", { weekday: "short" }),
+                day: date.toLocaleDateString("en-US", {
+                    weekday: "short",
+                }),
                 tempHigh: Math.round(data.main.temp_max),
                 tempLow: Math.round(data.main.temp_min),
                 icon: data.weather[0].icon,
             });
         }
 
-        setForecastData(daily);
+        return daily;
     }, [forecast]);
 
     return (
@@ -58,8 +54,8 @@ function Header() {
 
                 {/* Right Controls */}
                 {/* <div className="flex items-center gap-6"> */}
-                    {/* Unit Toggle */}
-                    {/* <div className="flex rounded-full bg-gray-100 p-1">
+                {/* Unit Toggle */}
+                {/* <div className="flex rounded-full bg-gray-100 p-1">
                         {["C", "F"].map((u) => (
                             <button
                                 key={u}
@@ -74,8 +70,8 @@ function Header() {
                         ))}
                     </div> */}
 
-                    {/* Dark Mode Toggle */}
-                    {/* <button
+                {/* Dark Mode Toggle */}
+                {/* <button
                         onClick={toggleDark}
                         className={`flex items-center rounded-full px-4 py-2 text-sm font-medium transition ${isDarkMode
                             ? "bg-black text-white"

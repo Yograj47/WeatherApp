@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { LocateFixed, Search } from "lucide-react";
 import useWeatherStore from "../stores/weatherStore";
 import getLocation from "../utils/GetLocation";
