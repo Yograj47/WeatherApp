@@ -1,5 +1,6 @@
 const CACHE_PREFIX = "weather-cache:";
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+// const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+const CACHE_TTL = 5000;
 
 function buildCacheKey(query) {
     if (typeof query === "string") {
@@ -34,18 +35,37 @@ function get(query) {
             return null;
         }
 
-        const isExpired =
-            Date.now() - cached.timestamp > CACHE_TTL;
-
-        if (isExpired) {
-            localStorage.removeItem(key);
-            return null;
-        }
-
         return cached.data;
     } catch (error) {
         console.warn("Weather cache read failed:", error);
         return null;
+    }
+}
+
+function isStale(query) {
+    const key = buildCacheKey(query);
+
+    if (!key) return false;
+
+    try {
+        const stored = localStorage.getItem(key);
+
+        if (!stored) return false;
+
+        const cached = JSON.parse(stored);
+
+        if (!cached.timestamp) return false;
+
+        console.log(
+            "Cache age:",
+            Date.now() - cached.timestamp
+        );
+
+        return (
+            Date.now() - cached.timestamp > CACHE_TTL
+        );
+    } catch {
+        return false;
     }
 }
 
@@ -95,6 +115,7 @@ function clear() {
 
 export {
     get,
+    isStale,
     set,
     remove,
     clear,

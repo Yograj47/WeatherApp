@@ -11,6 +11,7 @@ import {
 import {
     get as getCachedWeather,
     set as setCachedWeather,
+    isStale
 } from "../features/weather/weatherCache";
 import {
     getPendingRequest,
@@ -29,20 +30,27 @@ export default function useWeather(query) {
     const fetchWeather = useCallback(async () => {
         if (!query) return;
 
-        setLoading(true);
+        const cachedData = getCachedWeather(query);
+
+        if (!cachedData) {
+            setLoading(true);
+        }
+
         setError(null);
 
         try {
             // -----------------------------
             // 1. Check cache
             // -----------------------------
-
-            const cachedData = getCachedWeather(query);
+            const stale = isStale(query);
 
             if (cachedData) {
                 setWeather(cachedData.weather);
                 setForecast(cachedData.forecast);
-                return;
+
+                if (!stale) {
+                    return;
+                }
             }
 
             const pendingRequest = getPendingRequest(query);
