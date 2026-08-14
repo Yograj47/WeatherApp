@@ -12,6 +12,11 @@ import {
     get as getCachedWeather,
     set as setCachedWeather,
 } from "../features/weather/weatherCache";
+import {
+    getPendingRequest,
+    setPendingRequest,
+    removePendingRequest,
+} from "../features/weather/weatherRequests";
 
 export default function useWeather(query) {
     const {
@@ -40,6 +45,17 @@ export default function useWeather(query) {
                 return;
             }
 
+            const pendingRequest = getPendingRequest(query);
+
+            if (pendingRequest) {
+                const result = await pendingRequest;
+
+                setWeather(result.weather);
+                setForecast(result.forecast);
+
+                return;
+            }
+
             // -----------------------------
             // 2. Build API query
             // -----------------------------
@@ -56,36 +72,38 @@ export default function useWeather(query) {
             // 3. Fetch API
             // -----------------------------
 
-            const [weatherData, forecastData] = await Promise.all([
-                getCurrentWeather(params),
-                getForecast(params),
-            ]);
+            const requestPromise = (async () => {
+                const [weatherData, forecastData] =
+                    await Promise.all([
+                        getCurrentWeather(params),
+                        getForecast(params),
+                    ]);
 
-            // -----------------------------
-            // 4. Normalize API response
-            // -----------------------------
+                const mappedWeather =
+                    mapCurrentWeather(weatherData);
 
-            const mappedWeather =
-                mapCurrentWeather(weatherData);
+                const mappedForecast =
+                    mapForecast(forecastData);
 
-            const mappedForecast =
-                mapForecast(forecastData);
+                return {
+                    weather: mappedWeather,
+                    forecast: mappedForecast,
+                };
+            })();
 
-            // -----------------------------
-            // 5. Cache normalized data
-            // -----------------------------
+            setPendingRequest(query, requestPromise);
 
-            setCachedWeather(query, {
-                weather: mappedWeather,
-                forecast: mappedForecast,
-            });
+            try {
+                const result = await requestPromise;
 
-            // -----------------------------
-            // 6. Update application state
-            // -----------------------------
+                setCachedWeather(query, result);
+                setWeather(result.weather);
+                setForecast(result.forecast);
+            }
+            finally {
+                removePendingRequest(query);
+            }
 
-            setWeather(mappedWeather);
-            setForecast(mappedForecast);
         } catch (err) {
             setError(
                 err.message || "Failed to fetch weather"
