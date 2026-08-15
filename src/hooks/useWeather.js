@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import useWeatherStore from "../stores/weatherStore";
 import {
     getCurrentWeather,
@@ -27,8 +27,12 @@ export default function useWeather(query) {
         setError,
     } = useWeatherStore();
 
+    const requestIdRef = useRef(0);
+
     const fetchWeather = useCallback(async () => {
         if (!query) return;
+
+        const requestId = ++requestIdRef.current;
 
         const cachedData = getCachedWeather(query);
 
@@ -57,6 +61,10 @@ export default function useWeather(query) {
 
             if (pendingRequest) {
                 const result = await pendingRequest;
+
+                if (requestId !== requestIdRef.current) {
+                    return;
+                }
 
                 setWeather(result.weather);
                 setForecast(result.forecast);
@@ -103,6 +111,10 @@ export default function useWeather(query) {
 
             try {
                 const result = await requestPromise;
+
+                if (requestId !== requestIdRef.current) {
+                    return;
+                }
 
                 setCachedWeather(query, result);
                 setWeather(result.weather);
