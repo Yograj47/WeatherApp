@@ -114,7 +114,116 @@ function mapForecast(data) {
     };
 }
 
+function mapDailyForecast(forecastData) {
+    if (!forecastData?.entries?.length) {
+        return [];
+    }
+
+    const timezoneOffset = forecastData.timezone ?? 0;
+
+    const days = new Map();
+
+    forecastData.entries.forEach((entry) => {
+        const localTimestamp =
+            (entry.timestamp + timezoneOffset) * 1000;
+
+        const localDate = new Date(localTimestamp);
+
+        const dateKey = localDate.toISOString().slice(0, 10);
+
+        if (!days.has(dateKey)) {
+            days.set(dateKey, []);
+        }
+
+        days.get(dateKey).push(entry);
+    });
+
+    return Array.from(days.entries())
+        .slice(0, 5)
+        .map(([dateKey, entries]) => {
+            const temperatures = entries
+                .map((entry) => entry.temperature.current)
+                .filter((temp) => temp !== null);
+
+            const middayEntry =
+                entries.find((entry) => {
+                    const localTimestamp =
+                        (entry.timestamp + timezoneOffset) * 1000;
+
+                    const hour =
+                        new Date(localTimestamp).getUTCHours();
+
+                    return hour >= 11 && hour <= 14;
+                }) || entries[Math.floor(entries.length / 2)];
+
+            const precipitation = entries.reduce(
+                (total, entry) => {
+                    return (
+                        total +
+                        (entry.precipitation?.rain ?? 0) +
+                        (entry.precipitation?.snow ?? 0)
+                    );
+                },
+                0
+            );
+
+            const humidityValues = entries
+                .map((entry) => entry.atmosphere?.humidity)
+                .filter((humidity) => humidity !== null);
+
+            const averageHumidity =
+                humidityValues.length > 0
+                    ? humidityValues.reduce(
+                        (total, humidity) => total + humidity,
+                        0
+                    ) / humidityValues.length
+                    : 0;
+
+            const averageWindSpeed =
+                entries.reduce(
+                    (total, entry) =>
+                        total + (entry.wind?.speed ?? 0),
+                    0
+                ) / entries.length;
+
+            return {
+                date: dateKey,
+
+                day: new Date(
+                    `${dateKey}T00:00:00Z`
+                ).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    timeZone: "UTC",
+                }),
+
+                tempHigh: Math.round(
+                    Math.max(...temperatures)
+                ),
+
+                tempLow: Math.round(
+                    Math.min(...temperatures)
+                ),
+
+                icon:
+                    middayEntry?.condition?.icon ?? null,
+
+                description:
+                    middayEntry?.condition?.description ?? "",
+
+                precipitation: Number(
+                    precipitation.toFixed(1)
+                ),
+
+                windSpeed: Number(
+                    (averageWindSpeed * 3.6).toFixed(1)
+                ),
+
+                humidity: Math.round(averageHumidity),
+            };
+        });
+}
 export {
     mapCurrentWeather,
     mapForecast,
+    mapDailyForecast
 };
