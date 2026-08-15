@@ -1,5 +1,6 @@
 import SearchCity from "./SearchCity.jsx";
-import useWeatherStore from "../stores/weatherStore";
+import useWeatherStore from "../../stores/weatherStore.js";
+import DesktopSearch from "./DesktopSearch.jsx";
 // import formatDateTime from "../utils/DateAndTime";
 
 function Sidebar() {
@@ -78,7 +79,7 @@ function Sidebar() {
 
             {/* Search */}
             <div className="mb-7 w-full">
-                <SearchCity />
+                <DesktopSearch />
             </div>
 
             {/* Location */}

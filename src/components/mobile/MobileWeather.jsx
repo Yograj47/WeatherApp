@@ -1,11 +1,11 @@
 import { Wind } from "lucide-react";
 import useWeatherStore from "../../stores/weatherStore";
 import formatDateTime from "../../utils/DateAndTime";
-import SearchCity from "../SearchCity";
+import MobileSearch from "./MobileSearch"
 
 function MobileWeather() {
     const { weather, forecast } = useWeatherStore();
-    
+
     const weatherIconApi = import.meta.env.VITE_WEATHER_API_ICON;
 
     if (!weather || !forecast) return null;
@@ -38,68 +38,82 @@ function MobileWeather() {
 
             {/* Search */}
             <div className="mb-6">
-                <SearchCity />
+                <MobileSearch />
             </div>
 
             {/* Current weather */}
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
-
-                <div className="flex items-center gap-4">
+            <div className="overflow-hidden rounded-4xl bg-white shadow-sm">
+                {/* Main weather */}
+                <div className="flex flex-col items-center px-6 pb-6 pt-4 text-center">
 
                     <img
                         src={`${weatherIconApi}/${currentIcon}@4x.png`}
-                        alt={currentDescription}
-                        className="h-28 w-28 object-contain"
+                        alt={currentDescription || "Weather icon"}
+                        className="h-32 w-32 object-contain"
                     />
 
-                    <div>
-                        <div className="flex items-start">
-                            <span className="text-6xl font-extralight leading-none">
-                                {Math.round(
-                                    weather.temperature.current
-                                )}
-                            </span>
+                    <div className="flex items-start justify-center">
+                        <span className="text-7xl font-extralight leading-none tracking-tight text-gray-900">
+                            {Math.round(weather.temperature.current)}
+                        </span>
 
-                            <span className="mt-1 text-2xl font-light">
-                                °C
-                            </span>
-                        </div>
-
-                        <p className="mt-2 text-sm text-gray-400">
-                            Feels like{" "}
-                            {Math.round(
-                                weather.temperature.feelsLike
-                            )}°
-                        </p>
+                        <span className="mt-2 text-2xl font-light text-gray-500">
+                            °C
+                        </span>
                     </div>
 
-                </div>
-
-                <div className="mt-4">
-
-                    <p className="font-medium capitalize text-gray-900">
+                    <p className="mt-3 text-base font-medium capitalize text-gray-900">
                         {currentDescription}
                     </p>
 
-                    <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-gray-400">
+                        Feels like{" "}
+                        {Math.round(weather.temperature.feelsLike)}°
+                    </p>
 
-                        <span>
-                            No precipitation
+                    <div className="mt-4 flex items-center gap-2 text-sm text-gray-400">
+                        <span className="font-medium text-gray-700">
+                            {day}
                         </span>
 
-                        <span className="flex items-center gap-1">
-                            <Wind size={14} />
-                            {windSpeed} km/h {windDirection}
+                        <span>·</span>
+
+                        <span>{time}</span>
+                    </div>
+                </div>
+
+                {/* Quick details */}
+                <div className="grid grid-cols-3 border-t border-gray-100">
+                    <div className="flex flex-col items-center gap-1 px-2 py-4">
+                        <span className="text-xs text-gray-400">
+                            Humidity
                         </span>
 
+                        <span className="text-sm font-semibold text-gray-800">
+                            {weather.atmosphere.humidity}%
+                        </span>
                     </div>
 
-                </div>
+                    <div className="flex flex-col items-center gap-1 border-x border-gray-100 px-2 py-4">
+                        <span className="text-xs text-gray-400">
+                            Wind
+                        </span>
 
-                <div className="mt-4 border-t border-gray-100 pt-3 text-xs text-gray-400">
-                    {day} · {time}
-                </div>
+                        <span className="text-sm font-semibold text-gray-800">
+                            {windSpeed} km/h {windDirection}
+                        </span>
+                    </div>
 
+                    <div className="flex flex-col items-center gap-1 px-2 py-4">
+                        <span className="text-xs text-gray-400">
+                            Visibility
+                        </span>
+
+                        <span className="text-sm font-semibold text-gray-800">
+                            {(weather.atmosphere.visibility / 1000).toFixed(1)} km
+                        </span>
+                    </div>
+                </div>
             </div>
         </section>
     );

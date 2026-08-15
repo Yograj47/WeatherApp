@@ -11,3 +11,11 @@
         transform: translateY(0);
     }
 }
+
+@utility scrollbar-none {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
