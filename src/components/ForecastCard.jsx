@@ -8,12 +8,12 @@ function ForecastCard({ item, weatherIconApi }) {
     return (
         <article
             className="
-                flex min-h-52 flex-col justify-between
-                rounded-3xl bg-white p-5
-                shadow-[0_8px_30px_rgba(0,0,0,0.04)]
-                transition-all duration-200
-                hover:-translate-y-1 hover:shadow-md
-            "
+                    min-w-37.5 flex-1
+                    flex min-h-52 flex-col justify-between
+                    rounded-3xl bg-white p-4 sm:p-5
+                    shadow-[0_8px_30px_rgba(0,0,0,0.04)]
+                    transition-all duration-200
+                    hover:-translate-y-1 hover:shadow-md"
         >
             {/* Day */}
             <div className="flex items-center justify-between">

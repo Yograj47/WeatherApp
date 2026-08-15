@@ -1,17 +1,21 @@
-import Header from "./Header"
-import TodayHighlights from "./TodayHighlights"
+import Header from "./Header";
+import TodayHighlights from "./TodayHighlights";
 
 function MainContent() {
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full">
 
-            {/* Top Section: Navigation + Weekly Forecast */}
             <section>
                 <Header />
             </section>
 
-            {/* Bottom Section: Grid of Widgets (UV, Humidity, etc.) */}
-            <section className="flex-1">
+            {/* Hourly Forecast */}
+            <section className="mt-8">
+                {/* <HourlyForecast /> */}
+            </section>
+
+            {/* Highlights */}
+            <section className="mt-8">
                 <TodayHighlights />
             </section>
 

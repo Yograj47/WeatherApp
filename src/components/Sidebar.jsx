@@ -1,23 +1,25 @@
 import SearchCity from "./SearchCity.jsx";
 import useWeatherStore from "../stores/weatherStore";
-import formatDateTime from "../utils/DateAndTime";
+// import formatDateTime from "../utils/DateAndTime";
 
 function Sidebar() {
     const { location, weather, forecast } = useWeatherStore();
 
-    const weatherIconApi = import.meta.env.VITE_WEATHER_API_ICON;
+    const weatherIconApi =
+        import.meta.env.VITE_WEATHER_API_ICON;
 
     if (!weather || !forecast) return null;
 
-    const { time, day } = formatDateTime(
-        weather.timestamp,
-        weather.timezone
-    );
+    // const { time, day } = formatDateTime(
+    //     weather.timestamp,
+    //     weather.timezone
+    // );
 
     const currentIcon = weather.condition.icon;
     const currentDescription = weather.condition.description;
 
-    const precipitation = forecast.entries?.[0]?.precipitation;
+    const precipitation =
+        forecast.entries?.[0]?.precipitation;
 
     const precipitationType =
         precipitation?.rain > 0
@@ -33,72 +35,201 @@ function Sidebar() {
                 ? precipitation.snow
                 : 0;
 
+    const windSpeed = (
+        weather.wind.speed * 3.6
+    ).toFixed(1);
+
+    const windDirection = [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+    ][
+        Math.round(weather.wind.direction / 45) % 8
+    ];
+
+    const humidity = weather.atmosphere.humidity;
+    const pressure = weather.atmosphere.pressure;
+
+    const visibility = weather.atmosphere.visibility
+        ? (weather.atmosphere.visibility / 1000).toFixed(1)
+        : null;
+
+    const cloudiness = weather.atmosphere.cloudiness;
+
+    const feelsLike = Math.round(
+        weather.temperature.feelsLike
+    );
+
+    const cityName =
+        weather.location?.name ||
+        location?.value ||
+        "Unknown location";
+
+    const country =
+        weather.location?.country || "";
+
     return (
-        <div className="flex h-full flex-col items-center px-6 md:py-4 py-0">
+        <div className="flex h-full flex-col px-5 py-4">
+
             {/* Search */}
-            <div className="md:mb-8 mb-0 w-full">
+            <div className="mb-7 w-full">
                 <SearchCity />
             </div>
 
+            {/* Location */}
+            <div className="mb-4">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                    {cityName}
+                </h2>
+
+                {country && (
+                    <p className="mt-1 text-sm text-gray-400">
+                        {country}
+                    </p>
+                )}
+            </div>
+
             {/* Weather Icon */}
-            <img
-                src={`${weatherIconApi}/${currentIcon}@4x.png`}
-                alt={currentDescription || "Weather icon"}
-                className="mb-6 h-44 w-44 object-contain"
-            />
+            <div className="flex justify-center">
+                <img
+                    src={`${weatherIconApi}/${currentIcon}@4x.png`}
+                    alt={
+                        currentDescription ||
+                        "Weather icon"
+                    }
+                    className="h-36 w-36 object-contain"
+                />
+            </div>
 
             {/* Temperature */}
-            <div className="mb-8 text-center">
-                <h1 className="flex items-start justify-center text-[6.5rem] font-extralight leading-none tracking-tight text-black">
-                    {Math.round(weather.temperature.current)}
-                    <span className="mt-4 text-3xl font-light">
+            <div className="mb-6 text-center">
+
+                <div className="flex items-start justify-center">
+                    <span className="text-[5.5rem] font-extralight leading-none tracking-tight text-black">
+                        {Math.round(
+                            weather.temperature.current
+                        )}
+                    </span>
+
+                    <span className="mt-2 text-3xl font-light">
                         °C
                     </span>
-                </h1>
+                </div>
 
-                <div className="mt-3 flex items-center justify-center gap-2 text-base">
-                    <span className="font-medium text-black">
-                        {day},
+                <p className="mt-3 text-sm text-gray-500">
+                    Feels like {feelsLike}°C
+                </p>
+
+                <p className="mt-4 text-base font-medium capitalize text-gray-900">
+                    {currentDescription}
+                </p>
+            </div>
+
+            {/* Quick Weather Summary */}
+            <div className="mb-6 space-y-3">
+
+                <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">
+                        Precipitation
                     </span>
 
-                    <span className="font-normal text-gray-400">
-                        {time}
+                    <span className="font-medium text-gray-800">
+                        {precipitationType ===
+                        "No precipitation"
+                            ? "No precipitation"
+                            : `${precipitationAmount} mm ${precipitationType.toLowerCase()}`}
                     </span>
                 </div>
+
+                <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">
+                        Wind
+                    </span>
+
+                    <span className="font-medium text-gray-800">
+                        {windSpeed} km/h {windDirection}
+                    </span>
+                </div>
+
             </div>
 
             {/* Divider */}
-            <div className="mb-6 w-full border-t border-gray-100" />
+            <div className="mb-5 border-t border-gray-100" />
 
-            {/* Weather Details */}
-            <div className="mb-auto w-full space-y-4">
-                <p className="text-center text-sm font-medium capitalize text-gray-800">
-                    {currentDescription}
-                </p>
+            {/* Weather Statistics */}
+            <div className="mb-auto space-y-4">
 
-                <div className="flex items-center justify-center gap-3 text-sm font-medium text-gray-700">
-                    <span>
-                        {precipitationType}
-                        {precipitationAmount > 0 &&
-                            ` — ${precipitationAmount} mm`}
-                    </span>
-                </div>
+                <SidebarStat
+                    label="Humidity"
+                    value={`${humidity}%`}
+                />
+
+                <SidebarStat
+                    label="Pressure"
+                    value={`${pressure} hPa`}
+                />
+
+                <SidebarStat
+                    label="Visibility"
+                    value={
+                        visibility !== null
+                            ? `${visibility} km`
+                            : "—"
+                    }
+                />
+
+                <SidebarStat
+                    label="Cloudiness"
+                    value={
+                        cloudiness !== null
+                            ? `${cloudiness}%`
+                            : "—"
+                    }
+                />
+
             </div>
 
-            {/* City Card */}
-            <div className="relative mt-8 h-24 w-full overflow-hidden rounded-3xl shadow-sm">
+            {/* Location Photo */}
+            <div className="relative mt-7 h-28 w-full overflow-hidden rounded-3xl shadow-sm">
+
                 <img
-                    src="https://images.unsplash.com/photo-1589800463007-3be49fe18b92?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWd8fHx8fA%3D%3D"
-                    alt=""
+                    src="https://images.unsplash.com/photo-1589800463007-3be49fe18b92?q=80&w=2070&auto=format&fit=crop"
+                    alt={cityName}
                     className="h-full w-full object-cover"
                 />
 
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <span className="text-sm font-semibold tracking-wide text-white">
-                        {location?.value}
-                    </span>
+                <div className="absolute inset-0 bg-black/30" />
+
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                    <p className="text-base font-semibold text-white">
+                        {cityName}
+                    </p>
+
+                    <p className="mt-0.5 text-xs text-white/80">
+                        {country}
+                    </p>
                 </div>
+
             </div>
+        </div>
+    );
+}
+
+function SidebarStat({ label, value }) {
+    return (
+        <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500">
+                {label}
+            </span>
+
+            <span className="font-medium text-gray-800">
+                {value}
+            </span>
         </div>
     );
 }

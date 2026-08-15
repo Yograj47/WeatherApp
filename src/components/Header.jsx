@@ -1,55 +1,37 @@
 import useWeatherStore from "../stores/weatherStore";
 import { mapDailyForecast } from "../features/weather/weatherMapper";
-import { useState } from "react";
 import ForecastCard from "./ForecastCard";
 
 function Header() {
     const { forecast } = useWeatherStore();
-    const [view, setView] = useState("week");
-
-    console.log("Forecast Data from header", forecast)
-
     const weatherIconApi =
         import.meta.env.VITE_WEATHER_API_ICON;
 
     const forecastData =
         mapDailyForecast(forecast);
 
-    console.log("Header Data:", forecastData)
-
     return (
-        <header className="w-full">
-            <div className="mb-6 flex items-center justify-between">
-                <div className="flex gap-6">
-                    {["week", "today"].map((value) => (
-                        <button
-                            key={value}
-                            onClick={() => setView(value)}
-                            className={`relative pb-2 text-xl font-bold transition ${view === value
-                                ? "text-gray-900 after:absolute after:bottom-0 after:left-0 after:h-0.75 after:w-full after:rounded-full after:bg-black"
-                                : "text-gray-300 hover:text-gray-500"
-                                }`}
-                        >
-                            {value.charAt(0).toUpperCase() +
-                                value.slice(1)}
-                        </button>
-                    ))}
-                </div>
+        <section className="w-full">
+            <div className="mb-5">
+                <h2 className="text-2xl font-bold text-gray-900">
+                    5-Day Forecast
+                </h2>
+                <p className="mt-1 text-sm text-gray-400">
+                    Weather forecast for the next five days
+                </p>
             </div>
 
-            {/* Forecast Cards */}
-            {view === "week" && (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                    {forecastData.map((item) => (
-                        <ForecastCard
-                            key={item.date}
-                            item={item}
-                            weatherIconApi={weatherIconApi}
-                        />
-                    ))}
-                </div>
-            )}
-        </header>
+            {/* Forecast cards */}
+            <div className="flex gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 lg:grid-cols-5 lg:gap-4">    {forecastData.map((item) => (
+                <ForecastCard
+                    key={item.date}
+                    item={item}
+                    weatherIconApi={weatherIconApi}
+                />
+            ))}
+
+            </div>
+        </section>
     );
 }
 

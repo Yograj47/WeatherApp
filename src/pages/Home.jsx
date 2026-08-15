@@ -1,13 +1,12 @@
 import useWeather from "../hooks/useWeather";
 import useWeatherStore from "../stores/weatherStore";
-import MainContent from "../components/MainContent"
-import Sidebar from "../components/Sidebar"
+import MainContent from "../components/MainContent";
+import Sidebar from "../components/Sidebar";
 import { useEffect } from "react";
+import MobileWeather from "../components/mobile/MobileWeather";
 
 function Home() {
     const { location, setError } = useWeatherStore();
-
-    console.log(import.meta.env.VITE_WEATHER_API_KEY)
 
     let cityOrCoords = null;
 
@@ -24,30 +23,35 @@ function Home() {
     useWeather(cityOrCoords);
 
     useEffect(() => {
-        console.log("=== DEBUG INFO ===");
-        console.log("Location:", location.value);
-        console.log("cityOrCoords:", cityOrCoords);
-        console.log("Weather data:", useWeatherStore.getState().weather);
-        console.log("Forecast data:", useWeatherStore.getState().forecast);
-        console.log("Loading:", useWeatherStore.getState().isLoading);
-        console.log("Error:", useWeatherStore.getState().error);
-    }, [location, cityOrCoords]);
-
-    useEffect(() => {
         if (!cityOrCoords) {
             setError("Empty Field");
         }
     }, [cityOrCoords, setError]);
 
     return (
-        <div className="h-screen w-full font-sans antialiased grid grid-cols-7">
-            <aside className="col-span-7 md:col-span-2 h-full bg-white p-4 border-r border-gray-200">
-                <Sidebar />
-            </aside>
+        <div className="min-h-screen w-full bg-[#F6F6F8] font-sans antialiased">
 
-            <main className="col-span-7 md:col-span-5 h-full bg-[#F6F6F8] p-6">
-                <MainContent />
-            </main>
+            {/* Desktop */}
+            <div className="hidden min-h-screen lg:grid lg:grid-cols-7">
+
+                <aside className="col-span-2 h-screen overflow-hidden border-r border-gray-200 bg-white p-4">
+                    <Sidebar />
+                </aside>
+
+                <main className="col-span-5 h-screen overflow-y-auto p-6">
+                    <MainContent />
+                </main>
+
+            </div>
+
+            {/* Mobile / Tablet */}
+            <div className="block lg:hidden">
+                <main className="min-h-screen px-4 py-4">
+                    <MobileWeather />
+                    {/* <MainContent /> */}
+                </main>
+            </div>
+
         </div>
     );
 }
