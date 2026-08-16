@@ -77,8 +77,8 @@ export default function TodayHighlights() {
     const pressure = current.atmosphere.pressure;
 
     return (
-        <section className="mt-8">
-            <div className="mb-4 sm:mb-6">
+        <section className="flex min-h-0 flex-1 flex-col">
+            <div className="mb-4">
                 <h2 className="text-lg font-bold text-gray-900 sm:text-2xl">
                     Today's Highlights
                 </h2>
@@ -88,8 +88,7 @@ export default function TodayHighlights() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
-
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-4">
                 {/* Wind */}
                 <HighlightCard title="Wind Status">
                     <div className="flex flex-col">
@@ -287,28 +286,24 @@ function HighlightCard({ title, children }) {
     return (
         <article
             className="
-                flex min-h-36 flex-col
+                flex flex-col
                 justify-between
-                rounded-3xl
+                rounded-2xl
                 bg-white
                 p-4
-                shadow-[0_8px_30px_rgba(0,0,0,0.03)]
+                shadow-[0_4px_20px_rgba(0,0,0,0.03)]
                 transition-all
                 hover:-translate-y-0.5
                 hover:shadow-md
-
-                sm:min-h-40
+                sm:rounded-3xl
                 sm:p-5
-
-                lg:min-h-44
-                lg:p-6
             "
         >
-            <h3 className="text-[11px] font-medium text-gray-400 sm:text-sm">
+            <h3 className="text-[11px] font-medium text-gray-400 sm:text-xs">
                 {title}
             </h3>
 
-            <div className="flex flex-1 flex-col justify-center">
+            <div className="mt-4">
                 {children}
             </div>
         </article>

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import useWeather from "../hooks/useWeather";
 import useWeatherStore from "../stores/weatherStore";
 
@@ -37,27 +38,29 @@ function Home() {
     return (
         <div className="min-h-screen w-full bg-[#F6F6F8] font-sans antialiased">
 
-            {/* Mobile: < 640px */}
+            {/* Mobile */}
             <div className="block sm:hidden">
-                <MobileHome />
+                <main className="min-h-screen px-3 py-3">
+                    <MobileHome />
+                </main>
             </div>
 
-            {/* Tablet: 640px - 1023px */}
-            <div className="hidden sm:block lg:hidden">
-                <TabletHome />
+            {/* Tablet */}
+            <div className="hidden sm:block xl:hidden">
+                <main className="min-h-screen px-5 py-5">
+                    <TabletHome />
+                </main>
             </div>
 
-            {/* Desktop: >= 1024px */}
-            <div className="hidden min-h-screen lg:grid lg:grid-cols-7">
-
-                <aside className="col-span-2 h-screen overflow-hidden border-r border-gray-200 bg-white p-5">
+            {/* Desktop */}
+            <div className="hidden h-dvh min-h-0 xl:grid xl:grid-cols-7 xl:gap-4">
+                <aside className="col-span-2 h-full min-h-0 overflow-hidden">
                     <Sidebar />
                 </aside>
 
-                <main className="col-span-5 h-screen overflow-y-auto p-6">
+                <main className="col-span-5 h-full min-h-0 overflow-y-auto p-6">
                     <MainContent />
                 </main>
-
             </div>
 
         </div>
