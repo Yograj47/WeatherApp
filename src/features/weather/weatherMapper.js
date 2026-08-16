@@ -1,3 +1,5 @@
+import { getLocalDateParts } from "../../utils/DateAndTime";
+
 function mapCurrentWeather(data) {
     if (!data) return null;
 
@@ -49,7 +51,6 @@ function mapCurrentWeather(data) {
         },
 
         timezone: data.timezone ?? 0,
-
         timestamp: data.dt ?? null,
     };
 }
@@ -119,17 +120,14 @@ function mapDailyForecast(forecastData) {
         return [];
     }
 
-    const timezoneOffset = forecastData.timezone ?? 0;
-
+    const timezone = forecastData.timezone ?? 0;
     const days = new Map();
 
     forecastData.entries.forEach((entry) => {
-        const localTimestamp =
-            (entry.timestamp + timezoneOffset) * 1000;
-
-        const localDate = new Date(localTimestamp);
-
-        const dateKey = localDate.toISOString().slice(0, 10);
+        const { dateKey } = getLocalDateParts(
+            entry.timestamp,
+            timezone
+        );
 
         if (!days.has(dateKey)) {
             days.set(dateKey, []);
@@ -147,23 +145,29 @@ function mapDailyForecast(forecastData) {
 
             const middayEntry =
                 entries.find((entry) => {
-                    const localTimestamp =
-                        (entry.timestamp + timezoneOffset) * 1000;
-
-                    const hour =
-                        new Date(localTimestamp).getUTCHours();
+                    const { hour } = getLocalDateParts(
+                        entry.timestamp,
+                        timezone
+                    );
 
                     return hour >= 11 && hour <= 14;
-                }) || entries[Math.floor(entries.length / 2)];
+                }) ||
+                entries[Math.floor(entries.length / 2)];
 
             const precipitation = entries.reduce(
-                (total, entry) => {
-                    return (
-                        total +
-                        (entry.precipitation?.rain ?? 0) +
-                        (entry.precipitation?.snow ?? 0)
-                    );
-                },
+                (total, entry) =>
+                    total +
+                    (entry.precipitation?.rain ?? 0) +
+                    (entry.precipitation?.snow ?? 0),
+                0
+            );
+
+            const precipitationProbability = entries.reduce(
+                (max, entry) =>
+                    Math.max(
+                        max,
+                        entry.precipitationProbability ?? 0
+                    ),
                 0
             );
 
@@ -174,7 +178,8 @@ function mapDailyForecast(forecastData) {
             const averageHumidity =
                 humidityValues.length > 0
                     ? humidityValues.reduce(
-                        (total, humidity) => total + humidity,
+                        (total, humidity) =>
+                            total + humidity,
                         0
                     ) / humidityValues.length
                     : 0;
@@ -214,6 +219,10 @@ function mapDailyForecast(forecastData) {
                     precipitation.toFixed(1)
                 ),
 
+                precipitationProbability: Math.round(
+                    precipitationProbability * 100
+                ),
+
                 windSpeed: Number(
                     (averageWindSpeed * 3.6).toFixed(1)
                 ),
@@ -222,8 +231,9 @@ function mapDailyForecast(forecastData) {
             };
         });
 }
+
 export {
     mapCurrentWeather,
-    mapForecast,
-    mapDailyForecast
-};
+    mapDailyForecast,
+    mapForecast
+}

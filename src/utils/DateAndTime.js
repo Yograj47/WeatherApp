@@ -1,7 +1,40 @@
-export default function formatDateTime(unixTime, timezoneOffset) {
-  const targetDate = new Date((unixTime + timezoneOffset) * 1000);
+function getLocalDateParts(unixTime, timezone = 0) {
+  if (!unixTime) {
+    return {
+      dateKey: null,
+      hour: null,
+    };
+  }
 
-  const options = { timeZone: "UTC" };
+  const localDate = new Date(
+    (unixTime + timezone) * 1000
+  );
+
+  return {
+    dateKey: localDate.toISOString().slice(0, 10),
+    hour: localDate.getUTCHours(),
+  };
+}
+
+export default function formatDateTime(
+  unixTime,
+  timezone = 0
+) {
+  if (!unixTime) {
+    return {
+      time: "—",
+      day: "—",
+      date: "—",
+    };
+  }
+
+  const targetDate = new Date(
+    (unixTime + timezone) * 1000
+  );
+
+  const options = {
+    timeZone: "UTC",
+  };
 
   const time = targetDate.toLocaleTimeString("en-US", {
     ...options,
@@ -15,7 +48,7 @@ export default function formatDateTime(unixTime, timezoneOffset) {
     weekday: "long",
   });
 
-  const fullDate = targetDate.toLocaleDateString("en-US", {
+  const date = targetDate.toLocaleDateString("en-US", {
     ...options,
     day: "numeric",
     month: "short",
@@ -25,6 +58,10 @@ export default function formatDateTime(unixTime, timezoneOffset) {
   return {
     time,
     day,
-    date: fullDate,
+    date,
   };
 }
+
+export {
+  getLocalDateParts,
+};

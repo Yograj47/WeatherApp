@@ -22,29 +22,29 @@ function ForecastCard({ item, weatherIconApi }) {
             <div className="flex items-center justify-between gap-2">
                 <span
                     className="
-                        text-xs font-bold uppercase
-                        tracking-wide text-gray-900
-                        sm:text-sm
-                    "
+            text-xs font-bold uppercase
+            tracking-wide text-gray-900
+            sm:text-sm
+        "
                 >
                     {item.day}
                 </span>
 
-                {item.precipitation > 0 && (
+                {item.precipitationProbability > 0 && (
                     <div
                         className="
-                            flex items-center gap-1
-                            text-[10px] font-medium text-blue-500
-                            sm:text-xs
-                        "
-                        title="Expected precipitation"
+                flex items-center gap-1
+                text-[10px] font-medium text-blue-500
+                sm:text-xs
+            "
+                        title="Chance of precipitation"
                     >
                         <CloudRain size={13} />
-                        <span>{item.precipitation} mm</span>
+                        <span>{item.precipitationProbability}%</span>
                     </div>
                 )}
             </div>
-
+            
             {/* Main weather information */}
             <div
                 className="
