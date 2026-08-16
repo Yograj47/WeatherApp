@@ -1,4 +1,8 @@
-import { Droplets } from "lucide-react";
+import {
+    Droplets,
+    Wind,
+} from "lucide-react";
+
 import useWeatherStore from "../../stores/weatherStore";
 import formatDateTime from "../../utils/DateAndTime";
 
@@ -8,121 +12,217 @@ function HourlyForecast() {
     const weatherIconApi =
         import.meta.env.VITE_WEATHER_API_ICON;
 
-    if (!forecast?.entries?.length) return null;
+    if (!forecast?.entries?.length) {
+        return null;
+    }
 
-    const hourlyData = forecast.entries.slice(0, 8);
+    const hourlyData =
+        forecast.entries.slice(0, 8);
+
+    const windDirections = [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+    ];
 
     return (
         <section className="w-full">
-            {/* Heading */}
             <div className="mb-4 sm:mb-5">
                 <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
                     Hourly Forecast
                 </h2>
 
                 <p className="mt-1 text-xs text-gray-400 sm:text-sm">
-                    Next 24 hours
+                    Weather progression for the next 24 hours
                 </p>
             </div>
 
-            {/* Scrollable hourly forecast */}
-            <div
-                className="
-                    flex w-full gap-3
-                    overflow-x-auto
-                    pb-2
-                    snap-x snap-mandatory
-                    scrollbar-none
-                    sm:gap-4
-                "
-            >
-                {hourlyData.map((item, index) => {
-                    const { time } = formatDateTime(
-                        item.timestamp,
-                        forecast.timezone
-                    );
+            <div className="overflow-x-auto pb-2 scrollbar-none">
+                <div className="flex min-w-max gap-3 sm:gap-4">
+                    {hourlyData.map((item, index) => {
+                        const { time } =
+                            formatDateTime(
+                                item.timestamp,
+                                forecast.timezone
+                            );
 
-                    const temperature = Math.round(
-                        item.temperature.current
-                    );
+                        const temperature =
+                            item.temperature?.current !==
+                            null &&
+                            item.temperature?.current !==
+                            undefined
+                                ? Math.round(
+                                    item.temperature.current
+                                )
+                                : null;
 
-                    const precipitation = Math.round(
-                        (item.precipitationProbability ?? 0) * 100
-                    );
+                        const precipitation =
+                            Math.round(
+                                (item.precipitationProbability ??
+                                    0) * 100
+                            );
 
-                    return (
-                        <article
-                            key={item.timestamp}
-                            className={`
-                                flex w-24 shrink-0
-                                snap-start
-                                flex-col items-center
-                                justify-between
-                                rounded-3xl
-                                px-3 py-4
-                                transition-all duration-200
+                        const windSpeed =
+                            item.wind?.speed !== null &&
+                            item.wind?.speed !== undefined
+                                ? (
+                                    item.wind.speed *
+                                    3.6
+                                ).toFixed(1)
+                                : null;
 
-                                sm:w-28 sm:px-4 sm:py-5
+                        const windDirection =
+                            item.wind?.direction !== null &&
+                            item.wind?.direction !==
+                                undefined
+                                ? windDirections[
+                                    Math.round(
+                                        item.wind.direction /
+                                            45
+                                    ) % 8
+                                ]
+                                : null;
 
-                                ${
-                                    index === 0
-                                        ? "bg-gray-900 text-white shadow-md"
-                                        : "bg-white text-gray-900 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-md"
-                                }
-                            `}
-                        >
-                            {/* Time */}
-                            <span
+                        const isCurrent =
+                            index === 0;
+
+                        return (
+                            <article
+                                key={item.timestamp}
                                 className={`
-                                    text-xs font-semibold
+                                    flex w-32 shrink-0
+                                    flex-col
+                                    rounded-3xl
+                                    p-4
+                                    transition-all
+                                    duration-200
+                                    sm:w-36
+                                    sm:p-5
                                     ${
-                                        index === 0
-                                            ? "text-gray-300"
-                                            : "text-gray-400"
+                                        isCurrent
+                                            ? "bg-gray-900 text-white shadow-md"
+                                            : "bg-white text-gray-900 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-md"
                                     }
                                 `}
                             >
-                                {index === 0 ? "Now" : time}
-                            </span>
+                                {/* Time */}
+                                <div className="text-center">
+                                    <span
+                                        className={`
+                                            text-xs font-semibold
+                                            ${
+                                                isCurrent
+                                                    ? "text-gray-300"
+                                                    : "text-gray-500"
+                                            }
+                                        `}
+                                    >
+                                        {isCurrent
+                                            ? "Now"
+                                            : time}
+                                    </span>
+                                </div>
 
-                            {/* Weather icon */}
-                            <img
-                                src={`${weatherIconApi}/${item.condition.icon}@2x.png`}
-                                alt={
-                                    item.condition.description ||
-                                    "Weather icon"
-                                }
-                                className="
-                                    my-3 h-12 w-12
-                                    object-contain
-                                    sm:h-14 sm:w-14
-                                "
-                            />
+                                {/* Weather */}
+                                <div className="my-4 flex flex-col items-center">
+                                    <img
+                                        src={`${weatherIconApi}/${item.condition?.icon}@2x.png`}
+                                        alt={
+                                            item.condition
+                                                ?.description ||
+                                            "Weather icon"
+                                        }
+                                        className="h-14 w-14 object-contain"
+                                    />
 
-                            {/* Temperature */}
-                            <span className="text-xl font-bold sm:text-2xl">
-                                {temperature}°
-                            </span>
+                                    <span className="mt-2 text-2xl font-semibold">
+                                        {temperature !==
+                                        null
+                                            ? `${temperature}°`
+                                            : "—"}
+                                    </span>
 
-                            {/* Precipitation */}
-                            <div
-                                className={`
-                                    mt-3 flex items-center gap-1
-                                    text-[10px] font-medium
-                                    sm:text-xs
-                                    ${
-                                        index === 0
-                                            ? "text-blue-200"
-                                            : "text-blue-500"
-                                    }
-                                `}
-                            >
-                                <Droplets size={12} />
-                                <span>{precipitation}%</span>
-                            </div>
-                        </article>
-                    );
-                })}
+                                    <span
+                                        className={`
+                                            mt-1 max-w-full
+                                            truncate text-center
+                                            text-[11px]
+                                            capitalize
+                                            ${
+                                                isCurrent
+                                                    ? "text-gray-400"
+                                                    : "text-gray-500"
+                                            }
+                                        `}
+                                    >
+                                        {item.condition
+                                            ?.description ||
+                                            "Unknown"}
+                                    </span>
+                                </div>
+
+                                {/* Weather details */}
+                                <div
+                                    className={`
+                                        mt-auto
+                                        space-y-2
+                                        border-t
+                                        pt-3
+                                        text-[11px]
+                                        ${
+                                            isCurrent
+                                                ? "border-gray-700 text-gray-300"
+                                                : "border-gray-100 text-gray-400"
+                                        }
+                                    `}
+                                >
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-1.5">
+                                            <Droplets
+                                                size={13}
+                                            />
+
+                                            <span>
+                                                Rain
+                                            </span>
+                                        </div>
+
+                                        <span className="font-medium">
+                                            {precipitation}%
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-1.5">
+                                            <Wind
+                                                size={13}
+                                            />
+
+                                            <span>
+                                                Wind
+                                            </span>
+                                        </div>
+
+                                        <span className="font-medium">
+                                            {windSpeed !==
+                                            null
+                                                ? `${windSpeed} ${
+                                                    windDirection ??
+                                                    ""
+                                                }`
+                                                : "—"}
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );

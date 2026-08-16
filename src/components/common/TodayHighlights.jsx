@@ -1,80 +1,59 @@
+import { useEffect, useState } from "react";
 import {
     Wind,
     Sunrise,
     Sunset,
-    Droplets,
-    Eye,
     Gauge,
 } from "lucide-react";
-import useWeatherStore from "../../stores/weatherStore";
 
+import useWeatherStore from "../../stores/weatherStore";
+import {
+    getSunData,
+    getWindData,
+    getHumidityLabel,
+    getVisibilityData,
+    getCloudinessLabel,
+} from "../../utils/TodayHighlights";
 
 export default function TodayHighlights() {
-    const { weather, forecast } = useWeatherStore();
+    const { weather } = useWeatherStore();
 
-    if (!weather || !forecast) return null;
+    const [now, setNow] = useState(
+        () => Math.floor(Date.now() / 1000)
+    );
 
-    const current = weather;
-    const forecastEntry = forecast.entries?.[0];
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(Math.floor(Date.now() / 1000));
+        }, 60_000);
 
-    if (!forecastEntry) return null;
+        return () => clearInterval(interval);
+    }, []);
 
-    /* ---------------- WIND ---------------- */
-    const windSpeed = (
-        current.wind.speed * 3.6
-    ).toFixed(1);
+    if (!weather) return null;
 
-    const windDeg = current.wind.direction ?? 0;
+    const wind = getWindData(weather.wind);
 
-    const windDirections = [
-        "N",
-        "NE",
-        "E",
-        "SE",
-        "S",
-        "SW",
-        "W",
-        "NW",
-    ];
+    const sun = getSunData(
+        weather.sun?.sunrise,
+        weather.sun?.sunset,
+        weather.timezone,
+        now
+    );
 
-    const windDir =
-        windDirections[Math.round(windDeg / 45) % 8];
+    const humidity =
+        weather.atmosphere?.humidity ?? null;
 
-    /* ---------------- SUNRISE / SUNSET ---------------- */
-    const sunrise = weather.sun.sunrise
-        ? new Date(weather.sun.sunrise * 1000).toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-            }
-        )
-        : "--";
+    const visibility =
+        getVisibilityData(
+            weather.atmosphere?.visibility
+        );
 
-    const sunset = weather.sun.sunset
-        ? new Date(weather.sun.sunset * 1000).toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-            }
-        )
-        : "--";
+    const cloudiness =
+        weather.atmosphere?.cloudiness ?? null;
 
-    /* ---------------- HUMIDITY ---------------- */
-    const humidity = current.atmosphere.humidity;
-
-    /* ---------------- VISIBILITY ---------------- */
-    const visibilityKm =
-        current.atmosphere.visibility != null
-            ? (current.atmosphere.visibility / 1000).toFixed(1)
-            : "--";
-
-    /* ---------------- CLOUD COVER ---------------- */
-    const cloudiness = current.atmosphere.cloudiness;
-
-    /* ---------------- PRESSURE ---------------- */
-    const pressure = current.atmosphere.pressure;
+    const pressure =
+        weather.atmosphere?.pressure ?? null;
 
     return (
         <section className="flex min-h-0 flex-1 flex-col">
@@ -88,13 +67,14 @@ export default function TodayHighlights() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-4">
+            <div className="grid flex-1 grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-4">
+
                 {/* Wind */}
                 <HighlightCard title="Wind Status">
                     <div className="flex flex-col">
                         <div className="flex items-baseline gap-1">
                             <span className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-                                {windSpeed}
+                                {wind.speed}
                             </span>
 
                             <span className="text-xs text-gray-400 sm:text-sm">
@@ -111,7 +91,7 @@ export default function TodayHighlights() {
                             </div>
 
                             <span className="text-xs font-medium sm:text-sm">
-                                {windDir}
+                                {wind.direction}
                             </span>
                         </div>
                     </div>
@@ -119,45 +99,35 @@ export default function TodayHighlights() {
 
                 {/* Sunrise / Sunset */}
                 <HighlightCard title="Sunrise & Sunset">
-                    <div className="space-y-3 sm:space-y-4">
+                    <div className="space-y-4">
 
-                        <div className="flex items-center gap-2 sm:gap-4">
-                            <div className="rounded-full bg-yellow-100 p-1.5 sm:p-2">
-                                <Sunrise
-                                    className="text-yellow-600"
-                                    size={16}
-                                />
-                            </div>
+                        <SunEvent
+                            icon={Sunrise}
+                            label="Sunrise"
+                            time={sun.sunriseTime}
+                            active={
+                                sun.nextEvent === "sunrise"
+                            }
+                            countdown={
+                                sun.nextEvent === "sunrise"
+                                    ? sun.countdown
+                                    : null
+                            }
+                        />
 
-                            <div>
-                                <p className="text-[10px] text-gray-400 sm:text-xs">
-                                    Sunrise
-                                </p>
-
-                                <p className="text-sm font-bold sm:text-lg">
-                                    {sunrise}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 sm:gap-4">
-                            <div className="rounded-full bg-yellow-100 p-1.5 sm:p-2">
-                                <Sunset
-                                    className="text-yellow-600"
-                                    size={16}
-                                />
-                            </div>
-
-                            <div>
-                                <p className="text-[10px] text-gray-400 sm:text-xs">
-                                    Sunset
-                                </p>
-
-                                <p className="text-sm font-bold sm:text-lg">
-                                    {sunset}
-                                </p>
-                            </div>
-                        </div>
+                        <SunEvent
+                            icon={Sunset}
+                            label="Sunset"
+                            time={sun.sunsetTime}
+                            active={
+                                sun.nextEvent === "sunset"
+                            }
+                            countdown={
+                                sun.nextEvent === "sunset"
+                                    ? sun.countdown
+                                    : null
+                            }
+                        />
 
                     </div>
                 </HighlightCard>
@@ -165,100 +135,95 @@ export default function TodayHighlights() {
                 {/* Humidity */}
                 <HighlightCard title="Humidity">
                     <div className="flex items-center justify-between gap-3">
-
                         <span className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-                            {humidity}
-                            <span className="text-base font-normal sm:text-xl">
-                                %
-                            </span>
+                            {humidity ?? "--"}
+                            {humidity != null && (
+                                <span className="text-base font-normal sm:text-xl">
+                                    %
+                                </span>
+                            )}
                         </span>
 
-                        <div className="relative h-14 w-4 overflow-hidden rounded-full bg-gray-100 sm:h-20 sm:w-5">
-                            <div
-                                className="absolute bottom-0 w-full rounded-full bg-blue-500"
-                                style={{
-                                    height: `${humidity}%`,
-                                }}
-                            />
-                        </div>
-
+                        {humidity != null && (
+                            <div className="relative h-14 w-4 overflow-hidden rounded-full bg-gray-100 sm:h-20 sm:w-5">
+                                <div
+                                    className="absolute bottom-0 w-full rounded-full bg-blue-500"
+                                    style={{
+                                        height: `${humidity}%`,
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <p className="mt-2 text-[10px] font-medium sm:text-xs">
-                        {humidity > 70
-                            ? "High 💧"
-                            : "Normal 👍🏻"}
+                        {getHumidityLabel(humidity)}
                     </p>
                 </HighlightCard>
 
                 {/* Visibility */}
                 <HighlightCard title="Visibility">
                     <div className="flex flex-col">
-
                         <div className="flex items-baseline gap-1">
                             <span className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-                                {visibilityKm}
+                                {visibility.value}
                             </span>
 
-                            <span className="text-xs text-gray-400 sm:text-sm">
-                                km
-                            </span>
+                            {visibility.value !== "--" && (
+                                <span className="text-xs text-gray-400 sm:text-sm">
+                                    km
+                                </span>
+                            )}
                         </div>
 
                         <p className="mt-3 text-[10px] font-medium text-gray-400 sm:mt-6 sm:text-xs">
-                            {visibilityKm !== "--" &&
-                                Number(visibilityKm) < 5
-                                ? "Poor 😷"
-                                : "Good 👀"}
+                            {visibility.label}
                         </p>
-
                     </div>
                 </HighlightCard>
 
                 {/* Cloud Cover */}
-
                 <HighlightCard title="Cloud Cover">
                     <div className="flex items-center justify-between gap-3">
-
                         <span className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-                            {cloudiness}
-                            <span className="text-base font-normal sm:text-xl">
-                                %
-                            </span>
+                            {cloudiness ?? "--"}
+                            {cloudiness != null && (
+                                <span className="text-base font-normal sm:text-xl">
+                                    %
+                                </span>
+                            )}
                         </span>
 
-                        <div className="relative h-14 w-4 overflow-hidden rounded-full bg-gray-100 sm:h-20 sm:w-5">
-                            <div
-                                className="absolute bottom-0 w-full rounded-full bg-gray-400"
-                                style={{
-                                    height: `${cloudiness}%`,
-                                }}
-                            />
-                        </div>
-
+                        {cloudiness != null && (
+                            <div className="relative h-14 w-4 overflow-hidden rounded-full bg-gray-100 sm:h-20 sm:w-5">
+                                <div
+                                    className="absolute bottom-0 w-full rounded-full bg-gray-400"
+                                    style={{
+                                        height: `${cloudiness}%`,
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <p className="mt-2 text-[10px] font-medium sm:text-xs">
-                        {cloudiness > 70
-                            ? "Cloudy ☁️"
-                            : cloudiness > 30
-                                ? "Partly Cloudy ⛅"
-                                : "Mostly Clear ☀️"}
+                        {getCloudinessLabel(cloudiness)}
                     </p>
                 </HighlightCard>
 
                 {/* Pressure */}
                 <HighlightCard title="Atmospheric Pressure">
                     <div className="flex flex-col">
-
                         <div className="flex items-baseline gap-1 sm:gap-2">
                             <span className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-                                {pressure}
+                                {pressure ?? "--"}
                             </span>
 
-                            <span className="text-xs text-gray-400 sm:text-sm">
-                                hPa
-                            </span>
+                            {pressure != null && (
+                                <span className="text-xs text-gray-400 sm:text-sm">
+                                    hPa
+                                </span>
+                            )}
                         </div>
 
                         <div className="mt-3 flex items-center gap-2 sm:mt-4">
@@ -273,7 +238,6 @@ export default function TodayHighlights() {
                                 Atmospheric pressure
                             </span>
                         </div>
-
                     </div>
                 </HighlightCard>
 
@@ -282,11 +246,49 @@ export default function TodayHighlights() {
     );
 }
 
+function SunEvent({
+    icon,
+    label,
+    time,
+    active,
+    countdown,
+}) {
+    const Icon = icon
+    return (
+        <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                <div className="rounded-full bg-yellow-100 p-1.5 sm:p-2">
+                    <Icon
+                        size={16}
+                        className="text-yellow-600"
+                    />
+                </div>
+
+                <div>
+                    <p className="text-[10px] text-gray-400 sm:text-xs">
+                        {label}
+                    </p>
+
+                    <p className="text-sm font-bold sm:text-lg">
+                        {time}
+                    </p>
+                </div>
+            </div>
+
+            {active && (
+                <span className="shrink-0 text-[10px] font-medium text-gray-400 sm:text-xs">
+                    {countdown}
+                </span>
+            )}
+        </div>
+    );
+}
+
 function HighlightCard({ title, children }) {
     return (
         <article
             className="
-                flex flex-col
+                flex min-h-0 flex-col
                 justify-between
                 rounded-2xl
                 bg-white

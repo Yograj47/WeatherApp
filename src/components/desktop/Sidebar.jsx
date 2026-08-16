@@ -3,7 +3,8 @@ import DesktopSearch from "./DesktopSearch.jsx";
 import formatDateTime from "../../utils/DateAndTime";
 
 function Sidebar() {
-    const { location, weather, forecast } = useWeatherStore();
+    const { location, weather, forecast } =
+        useWeatherStore();
 
     const weatherIconApi =
         import.meta.env.VITE_WEATHER_API_ICON;
@@ -35,13 +36,15 @@ function Sidebar() {
         <aside className="h-full min-h-0 p-5">
             <div className="flex h-full min-h-0 flex-col gap-6 rounded-3xl bg-white p-5 shadow-sm">
 
-                {/* Top: Search + Current Weather */}
+                {/* Search */}
                 <section className="shrink-0">
-                    <div className="mb-8">
-                        <DesktopSearch />
-                    </div>
+                    <DesktopSearch />
+                </section>
 
+                {/* Current Weather */}
+                <section className="shrink-0">
                     <div className="flex flex-col items-center text-center">
+
                         <div>
                             <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
                                 {cityName}
@@ -54,7 +57,7 @@ function Sidebar() {
                             )}
                         </div>
 
-                        <div className="my-5">
+                        <div className="my-4">
                             <img
                                 src={`${weatherIconApi}/${currentIcon}@4x.png`}
                                 alt={
@@ -87,9 +90,10 @@ function Sidebar() {
                     </div>
                 </section>
 
-                {/* Middle: Hourly Forecast */}
+                {/* Hourly Forecast */}
                 <section className="flex min-h-0 flex-1 flex-col">
-                    <div className="mb-4 shrink-0">
+
+                    <div className="mb-3 shrink-0">
                         <h3 className="text-base font-semibold text-gray-900">
                             Hourly Forecast
                         </h3>
@@ -104,7 +108,9 @@ function Sidebar() {
                             {hourlyEntries.map(
                                 (entry, index) => (
                                     <HourlyItem
-                                        key={entry.timestamp}
+                                        key={
+                                            entry.timestamp
+                                        }
                                         entry={entry}
                                         index={index}
                                         weatherIconApi={
@@ -119,7 +125,6 @@ function Sidebar() {
                         </div>
                     </div>
                 </section>
-
             </div>
         </aside>
     );
@@ -136,73 +141,148 @@ function HourlyItem({
         timezone
     );
 
-    const temperature = Math.round(
-        entry.temperature.current
+    const temperature =
+        entry.temperature?.current !== null &&
+        entry.temperature?.current !== undefined
+            ? Math.round(
+                entry.temperature.current
+            )
+            : null;
+
+    const precipitation = Math.round(
+        (entry.precipitationProbability ?? 0) * 100
     );
 
-    const precipitation =
-        Math.round(
-            entry.precipitationProbability
-        );
+    const windSpeed =
+        entry.wind?.speed !== null &&
+        entry.wind?.speed !== undefined
+            ? (
+                entry.wind.speed * 3.6
+            ).toFixed(1)
+            : null;
+
+    const windDirections = [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+    ];
+
+    const windDirection =
+        entry.wind?.direction !== null &&
+        entry.wind?.direction !== undefined
+            ? windDirections[
+                Math.round(
+                    entry.wind.direction / 45
+                ) % 8
+            ]
+            : null;
 
     const isCurrent = index === 0;
 
     return (
-        <div
+        <article
             className={`
-                flex items-center justify-between
                 rounded-2xl px-3 py-3
-                transition
+                transition-colors duration-200
                 ${
                     isCurrent
-                        ? "bg-gray-900 text-white"
+                        ? "bg-gray-700 text-white"
                         : "bg-gray-50 text-gray-900"
                 }
             `}
         >
-            <div className="flex min-w-0 items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
+
+                {/* Time + icon */}
+                <div className="flex min-w-0 items-center gap-3">
+                    <span
+                        className={`
+                            w-12 shrink-0 text-xs font-semibold
+                            ${
+                                isCurrent
+                                    ? "text-white"
+                                    : "text-gray-500"
+                            }
+                        `}
+                    >
+                        {isCurrent ? "Now" : time}
+                    </span>
+
+                    <img
+                        src={`${weatherIconApi}/${entry.condition?.icon}@2x.png`}
+                        alt={
+                            entry.condition
+                                ?.description ||
+                            "Weather icon"
+                        }
+                        className="h-9 w-9 shrink-0 object-contain"
+                    />
+
+                    <span
+                        className={`
+                            min-w-0 truncate text-xs capitalize
+                            ${
+                                isCurrent
+                                    ? "text-gray-300"
+                                    : "text-gray-500"
+                            }
+                        `}
+                    >
+                        {entry.condition
+                            ?.description ||
+                            "Unknown"}
+                    </span>
+                </div>
+
+                {/* Temperature */}
                 <span
                     className={`
-                        w-14 shrink-0 text-xs font-medium
+                        shrink-0 text-sm font-semibold
                         ${
                             isCurrent
                                 ? "text-white"
-                                : "text-gray-500"
+                                : "text-gray-800"
                         }
                     `}
                 >
-                    {isCurrent ? "Now" : time}
+                    {temperature !== null
+                        ? `${temperature}°`
+                        : "—"}
                 </span>
+            </div>
 
-                <img
-                    src={`${weatherIconApi}/${entry.condition.icon}@2x.png`}
-                    alt={
-                        entry.condition.description ||
-                        "Weather icon"
+            {/* Secondary details */}
+            <div
+                className={`
+                    mt-2 flex items-center justify-end
+                    gap-3 border-t pt-2
+                    text-[10px]
+                    ${
+                        isCurrent
+                            ? "border-gray-700 text-gray-400"
+                            : "border-gray-200 text-gray-400"
                     }
-                    className="h-9 w-9 shrink-0 object-contain"
-                />
-            </div>
-
-            <div className="flex items-center gap-4">
-                <span
-                    className={`
-                        text-xs
-                        ${
-                            isCurrent
-                                ? "text-white/70"
-                                : "text-gray-400"
-                        }
-                    `}
-                >
-                    {precipitation}%
+                `}
+            >
+                <span>
+                    Rain {precipitation}%
                 </span>
 
-                <span className="w-9 text-right text-sm font-semibold">
-                    {temperature}°
+                <span>
+                    {windSpeed !== null
+                        ? `${windSpeed} km/h`
+                        : "—"}
+                    {windDirection
+                        ? ` ${windDirection}`
+                        : ""}
                 </span>
             </div>
-        </div>
+        </article>
     );
 }
 

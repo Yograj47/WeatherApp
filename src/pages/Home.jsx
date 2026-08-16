@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import useWeather from "../hooks/useWeather";
+import NetworkStatus from "../components/common/NetworkStatus";
 import useWeatherStore from "../stores/weatherStore";
 
 import MobileHome from "../components/mobile/MobileHome";
@@ -8,6 +9,7 @@ import TabletHome from "../components/tablet/TabletHome";
 
 import MainContent from "../components/desktop/MainContent";
 import Sidebar from "../components/desktop/Sidebar";
+import Settings from "../components/common/Settings";
 
 function Home() {
     const { location, setError } = useWeatherStore();
@@ -36,7 +38,7 @@ function Home() {
     }, [cityOrCoords, setError]);
 
     return (
-        <div className="min-h-screen w-full bg-[#F6F6F8] font-sans antialiased">
+        <div className="relative min-h-screen w-full bg-[#F6F6F8] font-sans antialiased">
 
             {/* Mobile */}
             <div className="block sm:hidden">
@@ -63,6 +65,11 @@ function Home() {
                 </main>
             </div>
 
+            {/* Global floating UI */}
+            <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3">
+                <NetworkStatus />
+                <Settings />
+            </div>
         </div>
     );
 }
