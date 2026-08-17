@@ -71,6 +71,7 @@ function Sidebar() {
                                     currentDescription ||
                                     "Weather icon"
                                 }
+                                fetchPriority="high"
                                 className="h-24 w-24 object-contain"
                             />
                         </div>
