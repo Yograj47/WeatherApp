@@ -9,7 +9,7 @@ import TabletHome from "../components/tablet/TabletHome";
 
 import MainContent from "../components/desktop/MainContent";
 import Sidebar from "../components/desktop/Sidebar";
-import Settings from "../components/common/Settings";
+import Settings from "../components/setting/Settings";
 
 function Home() {
     const { location, setError } = useWeatherStore();
