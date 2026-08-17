@@ -197,10 +197,11 @@ function Settings() {
                 dark:hover:bg-gray-800
                 dark:hover:text-gray-100
 
-                ${showSettings
+                ${
+                    showSettings || isOpen
                         ? "translate-y-0 opacity-100"
                         : "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
-                    }
+                }
             `}
                 aria-label="Open settings"
             >
@@ -215,7 +216,6 @@ function Settings() {
             </button>
         </div>
     );
-
 }
 
-export default Settings;
+export default Settings; 
