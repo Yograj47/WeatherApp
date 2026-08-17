@@ -38,6 +38,9 @@ function CitySearchSelect() {
         { value: "Lumle", label: "Lumle" },
     ];
 
+    const isDarkMode =
+        document.documentElement.classList.contains("dark");
+
     return (
         <Select
             options={nepalCityOptions}
@@ -47,9 +50,111 @@ function CitySearchSelect() {
             menuPortalTarget={document.body}
             menuPosition="fixed"
             styles={{
+                control: (base, state) => ({
+                    ...base,
+                    minHeight: "40px",
+                    borderRadius: "12px",
+                    borderColor: state.isFocused
+                        ? isDarkMode
+                            ? "#6b7280"
+                            : "#9ca3af"
+                        : isDarkMode
+                            ? "#374151"
+                            : "#e5e7eb",
+                    backgroundColor: isDarkMode
+                        ? "#1f2937"
+                        : "#ffffff",
+                    boxShadow: state.isFocused
+                        ? "none"
+                        : base.boxShadow,
+                    "&:hover": {
+                        borderColor: isDarkMode
+                            ? "#4b5563"
+                            : "#d1d5db",
+                    },
+                }),
+
+                input: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#f9fafb"
+                        : "#111827",
+                }),
+
+                singleValue: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#f9fafb"
+                        : "#111827",
+                }),
+
+                placeholder: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#9ca3af"
+                        : "#9ca3af",
+                }),
+
+                menu: (base) => ({
+                    ...base,
+                    backgroundColor: isDarkMode
+                        ? "#1f2937"
+                        : "#ffffff",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                }),
+
                 menuPortal: (base) => ({
                     ...base,
                     zIndex: 9999,
+                }),
+
+                option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isSelected
+                        ? isDarkMode
+                            ? "#374151"
+                            : "#f3f4f6"
+                        : state.isFocused
+                            ? isDarkMode
+                                ? "#374151"
+                                : "#f9fafb"
+                            : "transparent",
+                    color: isDarkMode
+                        ? "#f9fafb"
+                        : "#111827",
+                    cursor: "pointer",
+                }),
+
+                noOptionsMessage: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#9ca3af"
+                        : "#6b7280",
+                }),
+
+                dropdownIndicator: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#9ca3af"
+                        : "#6b7280",
+                    "&:hover": {
+                        color: isDarkMode
+                            ? "#f9fafb"
+                            : "#111827",
+                    },
+                }),
+
+                clearIndicator: (base) => ({
+                    ...base,
+                    color: isDarkMode
+                        ? "#9ca3af"
+                        : "#6b7280",
+                    "&:hover": {
+                        color: isDarkMode
+                            ? "#f9fafb"
+                            : "#111827",
+                    },
                 }),
             }}
         />

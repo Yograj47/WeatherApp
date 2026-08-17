@@ -48,25 +48,27 @@ function Clock({ onClose }) {
     return (
         <div
             className="
-                absolute
-                bottom-14
-                right-0
-                w-72
-                rounded-3xl
-                border border-gray-100
-                bg-white
-                p-5
-                shadow-[0_15px_50px_rgba(0,0,0,0.12)]
-            "
+            absolute
+            bottom-14
+            right-0
+            w-72
+            rounded-3xl
+            border border-gray-100
+            bg-white
+            p-5
+            shadow-[0_15px_50px_rgba(0,0,0,0.12)]
+            dark:border-gray-800
+            dark:bg-gray-900
+        "
         >
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-sm font-semibold text-gray-900">
+                    <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                         Clock
                     </h2>
 
-                    <p className="mt-0.5 text-[11px] text-gray-400">
+                    <p className="mt-0.5 text-[11px] text-gray-400 dark:text-gray-500">
                         Local time
                     </p>
                 </div>
@@ -75,13 +77,16 @@ function Clock({ onClose }) {
                     type="button"
                     onClick={onClose}
                     className="
-                        rounded-full
-                        p-1.5
-                        text-gray-400
-                        transition
-                        hover:bg-gray-100
-                        hover:text-gray-700
-                    "
+                    rounded-full
+                    p-1.5
+                    text-gray-400
+                    transition
+                    hover:bg-gray-100
+                    hover:text-gray-700
+                    dark:text-gray-500
+                    dark:hover:bg-gray-800
+                    dark:hover:text-gray-200
+                "
                     aria-label="Close clock"
                 >
                     <X size={15} />
@@ -91,33 +96,33 @@ function Clock({ onClose }) {
             {/* Time */}
             <div className="mt-7 text-center">
                 <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-5xl font-light tracking-tight text-gray-900">
+                    <span className="text-5xl font-light tracking-tight text-gray-900 dark:text-gray-100">
                         {time}
                     </span>
 
-                    <span className="text-xs font-semibold text-gray-400">
+                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">
                         {period}
                     </span>
                 </div>
 
-                <p className="mt-2 text-xs text-gray-400">
+                <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
                     {date}
                 </p>
             </div>
 
             {/* Location */}
-            <div className="mt-6 rounded-2xl bg-gray-50 px-3 py-3">
+            <div className="mt-6 rounded-2xl bg-gray-50 px-3 py-3 dark:bg-gray-800">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-gray-500 shadow-sm">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-gray-500 shadow-sm dark:bg-gray-700 dark:text-gray-400">
                         <MapPin size={15} />
                     </div>
 
                     <div className="min-w-0">
-                        <p className="truncate text-xs font-medium text-gray-800">
+                        <p className="truncate text-xs font-medium text-gray-800 dark:text-gray-200">
                             {cityName}
                         </p>
 
-                        <p className="mt-0.5 text-[10px] text-gray-400">
+                        <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
                             Local time
                         </p>
                     </div>
@@ -125,7 +130,7 @@ function Clock({ onClose }) {
             </div>
 
             {/* Timezone */}
-            <div className="mt-3 flex items-center gap-2 px-1 text-[10px] text-gray-400">
+            <div className="mt-3 flex items-center gap-2 px-1 text-[10px] text-gray-400 dark:text-gray-500">
                 <Globe2 size={12} />
 
                 <span>

@@ -64,8 +64,9 @@ function TabletWeather() {
         <section className="space-y-4">
             <MobileSearch />
 
-            <div className="overflow-hidden rounded-4xl bg-white shadow-sm">
-                <div className="grid grid-cols-2 divide-x divide-gray-100">
+            <div className="overflow-hidden rounded-4xl bg-white shadow-sm dark:bg-gray-900">
+                <div className="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-800">
+
                     {/* Main weather */}
                     <div className="flex min-h-72 flex-col justify-between p-7">
                         <div>
@@ -73,7 +74,7 @@ function TabletWeather() {
                                 Current Weather
                             </p>
 
-                            <h1 className="mt-2 text-2xl font-semibold text-gray-900">
+                            <h1 className="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
                                 {cityName}
                             </h1>
 
@@ -93,7 +94,7 @@ function TabletWeather() {
 
                             <div>
                                 <div className="flex items-start">
-                                    <span className="text-7xl font-extralight leading-none tracking-tight text-gray-900">
+                                    <span className="text-7xl font-extralight leading-none tracking-tight text-gray-900 dark:text-gray-100">
                                         {temperature}
                                     </span>
 
@@ -102,14 +103,14 @@ function TabletWeather() {
                                     </span>
                                 </div>
 
-                                <p className="mt-3 text-sm font-medium capitalize text-gray-800">
+                                <p className="mt-3 text-sm font-medium capitalize text-gray-800 dark:text-gray-200">
                                     {description}
                                 </p>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2 text-xs text-gray-400">
-                            <span className="font-medium text-gray-700">
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
                                 {day}
                             </span>
 
@@ -151,12 +152,12 @@ function TabletWeather() {
                             />
                         </div>
 
-                        <div className="mt-6 flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
+                        <div className="mt-6 flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3 dark:bg-gray-800">
                             <span className="text-sm text-gray-400">
                                 Feels like
                             </span>
 
-                            <span className="text-sm font-semibold text-gray-800">
+                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                                 {feelsLike}°C
                             </span>
                         </div>
@@ -168,10 +169,11 @@ function TabletWeather() {
 }
 
 function WeatherStat({ icon, label, value }) {
-   const Icon = icon;
+    const Icon = icon;
+
     return (
         <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-50 text-gray-500">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-50 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
                 <Icon size={16} strokeWidth={2} />
             </div>
 
@@ -180,7 +182,7 @@ function WeatherStat({ icon, label, value }) {
                     {label}
                 </p>
 
-                <p className="mt-0.5 truncate text-sm font-semibold text-gray-800">
+                <p className="mt-0.5 truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
                     {value}
                 </p>
             </div>

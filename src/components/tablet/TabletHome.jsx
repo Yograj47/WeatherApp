@@ -5,18 +5,18 @@ import TodayHighlights from "../common/TodayHighlights";
 
 function TabletHome() {
     return (
-        <main className="min-h-screen w-full bg-[#F6F6F8] px-5 py-5">
-            <div className="mx-auto w-full max-w-5xl space-y-8">
-                <TabletWeather />
+    <main className="min-h-screen w-full bg-[#F6F6F8] px-5 py-5 dark:bg-gray-950">
+        <div className="mx-auto w-full max-w-5xl space-y-8">
+            <TabletWeather />
 
-                <HourlyForecast />
+            <HourlyForecast />
 
-                <DailyForecast />
+            <DailyForecast />
 
-                <TodayHighlights />
-            </div>
-        </main>
-    );
+            <TodayHighlights />
+        </div>
+    </main>
+);
 }
 
 export default TabletHome;

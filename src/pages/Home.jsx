@@ -38,9 +38,15 @@ function Home() {
     }, [cityOrCoords, setError]);
 
     return (
-        <div className="relative min-h-screen w-full bg-[#F6F6F8] font-sans antialiased">
-
-            {/* Mobile */}
+        <div
+            className="
+            relative min-h-screen w-full
+            bg-[#F6F6F8]
+            font-sans antialiased
+            dark:bg-gray-950
+        "
+        >
+                {/* Mobile */}
             <div className="block sm:hidden">
                 <main className="min-h-screen px-3 py-3">
                     <MobileHome />

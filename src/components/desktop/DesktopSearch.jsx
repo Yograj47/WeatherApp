@@ -28,72 +28,126 @@ function DesktopSearch() {
     };
 
     return (
-        <div className="relative flex h-10 w-full items-center">
-            {/* Collapsed search button */}
+    <div className="relative flex h-10 w-full items-center">
+        {/* Collapsed search button */}
+        <button
+            type="button"
+            aria-label="Search city"
+            onClick={() => setIsOpen(true)}
+            className={`
+                absolute right-0 top-0 z-20
+                flex h-10 w-10 items-center justify-center
+                rounded-full
+                border border-gray-200
+                bg-gray-100
+                text-gray-500
+                shadow-sm
+                transition-all duration-300
+
+                hover:border-gray-300
+                hover:bg-gray-200
+                hover:text-gray-900
+
+                dark:border-gray-700
+                dark:bg-gray-800
+                dark:text-gray-400
+                dark:hover:border-gray-600
+                dark:hover:bg-gray-700
+                dark:hover:text-gray-100
+
+                ${isOpen
+                    ? "pointer-events-none scale-90 opacity-0"
+                    : "scale-100 opacity-100"
+                }
+            `}
+        >
+            <Search size={17} strokeWidth={2.2} />
+        </button>
+
+        {/* Expanded search */}
+        <div
+            className={`
+                absolute inset-0 z-10
+                flex items-center gap-2
+                rounded-2xl
+                border border-gray-200
+                bg-gray-100
+                px-1
+                transition-all duration-300 ease-out
+
+                dark:border-gray-700
+                dark:bg-gray-800
+
+                ${isOpen
+                    ? "visible scale-100 opacity-100"
+                    : "invisible scale-95 opacity-0"
+                }
+            `}
+        >
+            <div className="min-w-0 flex-1">
+                <CitySearchSelect />
+            </div>
+
+            {/* Geolocation */}
             <button
                 type="button"
-                aria-label="Search city"
-                onClick={() => setIsOpen(true)}
-                className={`
-                    absolute right-0 top-0 z-20
-                    flex h-10 w-10 items-center justify-center
-                    rounded-full bg-[#ddddde]
+                aria-label="Use current location"
+                title="Use current location"
+                onClick={handleGeo}
+                className="
+                    flex h-8 w-8 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    border border-gray-200
+                    bg-white
                     text-gray-500
-                    transition-all duration-300
-                    hover:bg-gray-200 hover:text-black
-                    ${isOpen
-                        ? "pointer-events-none scale-90 opacity-0"
-                        : "scale-100 opacity-100"
-                    }
-                `}
+                    transition-all duration-200
+
+                    hover:border-gray-300
+                    hover:bg-gray-50
+                    hover:text-gray-900
+
+                    dark:border-gray-700
+                    dark:bg-gray-900
+                    dark:text-gray-400
+                    dark:hover:border-gray-600
+                    dark:hover:bg-gray-800
+                    dark:hover:text-gray-100
+                "
             >
-                <Search size={17} strokeWidth={2.2} />
+                <LocateFixed
+                    size={15}
+                    strokeWidth={2.2}
+                />
             </button>
 
-            {/* Expanded search */}
-            <div
-                className={`
-                    absolute inset-0 z-10
-                    flex items-center gap-2
-                    rounded-2xl bg-gray-100
-                    transition-all duration-300 ease-out
-                    ${isOpen
-                        ? "visible scale-100 opacity-100"
-                        : "invisible scale-95 opacity-0"
-                    }
-                `}
+            {/* Close */}
+            <button
+                type="button"
+                aria-label="Close search"
+                title="Close search"
+                onClick={() => setIsOpen(false)}
+                className="
+                    mr-1
+                    flex h-8 w-8 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    text-gray-400
+                    transition-all duration-200
+
+                    hover:bg-white
+                    hover:text-gray-900
+
+                    dark:text-gray-500
+                    dark:hover:bg-gray-900
+                    dark:hover:text-gray-100
+                "
             >
-                <div className="min-w-0 flex-1">
-                    <CitySearchSelect />
-                </div>
-
-                {/* Geolocation */}
-                <button
-                    type="button"
-                    aria-label="Use current location"
-                    title="Use current location"
-                    onClick={handleGeo}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-gray-500 transition hover:text-black"
-                >
-                    <LocateFixed
-                        size={15}
-                        strokeWidth={2.2}
-                    />
-                </button>
-
-                {/* Close */}
-                <button
-                    type="button"
-                    aria-label="Close search"
-                    title="Close search"
-                    onClick={() => setIsOpen(false)}
-                    className="mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-white hover:text-black"
-                >
-                    <X size={15} />
-                </button>
-            </div>
+                <X size={15} />
+            </button>
         </div>
-    );
+    </div>
+);
 }
 
 export default DesktopSearch;

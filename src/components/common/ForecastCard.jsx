@@ -8,24 +8,33 @@ function ForecastCard({ item, weatherIconApi }) {
     return (
         <article
             className="
-        flex min-h-44 w-full min-w-0
-        flex-col justify-between
-        rounded-3xl bg-white
-        p-4
-        shadow-[0_8px_30px_rgba(0,0,0,0.04)]
-        transition-all duration-200
-        hover:-translate-y-1 hover:shadow-md
-        sm:min-h-48 sm:p-5
-    "
+                flex min-h-44 w-full min-w-0
+                flex-col justify-between
+                rounded-3xl
+                border border-gray-100
+                bg-white
+                p-4
+                shadow-[0_8px_30px_rgba(0,0,0,0.04)]
+                transition-all duration-200
+                hover:-translate-y-1 hover:shadow-md
+
+                dark:border-gray-800
+                dark:bg-gray-900
+                dark:shadow-none
+                dark:hover:bg-gray-800
+
+                sm:min-h-48 sm:p-5
+            "
         >
             {/* Header */}
             <div className="flex items-center justify-between gap-2">
                 <span
                     className="
-            text-xs font-bold uppercase
-            tracking-wide text-gray-900
-            sm:text-sm
-        "
+                        text-xs font-bold uppercase
+                        tracking-wide text-gray-900
+                        dark:text-gray-100
+                        sm:text-sm
+                    "
                 >
                     {item.day}
                 </span>
@@ -33,18 +42,22 @@ function ForecastCard({ item, weatherIconApi }) {
                 {item.precipitationProbability > 0 && (
                     <div
                         className="
-                flex items-center gap-1
-                text-[10px] font-medium text-blue-500
-                sm:text-xs
-            "
+                            flex items-center gap-1
+                            text-[10px] font-medium
+                            text-blue-500
+                            dark:text-blue-400
+                            sm:text-xs
+                        "
                         title="Chance of precipitation"
                     >
                         <CloudRain size={13} />
-                        <span>{item.precipitationProbability}%</span>
+                        <span>
+                            {item.precipitationProbability}%
+                        </span>
                     </div>
                 )}
             </div>
-            
+
             {/* Main weather information */}
             <div
                 className="
@@ -56,7 +69,10 @@ function ForecastCard({ item, weatherIconApi }) {
             >
                 <img
                     src={`${weatherIconApi}/${item.icon}@2x.png`}
-                    alt={item.description || "Weather icon"}
+                    alt={
+                        item.description ||
+                        "Weather icon"
+                    }
                     className="
                         h-12 w-12 object-contain
                         sm:h-14 sm:w-14
@@ -68,6 +84,7 @@ function ForecastCard({ item, weatherIconApi }) {
                         className="
                             truncate text-xs font-medium
                             capitalize text-gray-500
+                            dark:text-gray-400
                             sm:text-sm
                         "
                     >
@@ -77,7 +94,9 @@ function ForecastCard({ item, weatherIconApi }) {
                     <div className="mt-1 flex items-baseline gap-1.5">
                         <span
                             className="
-                                text-xl font-bold text-gray-900
+                                text-xl font-bold
+                                text-gray-900
+                                dark:text-gray-100
                                 sm:text-2xl
                             "
                         >
@@ -86,7 +105,9 @@ function ForecastCard({ item, weatherIconApi }) {
 
                         <span
                             className="
-                                text-base font-medium text-gray-300
+                                text-base font-medium
+                                text-gray-300
+                                dark:text-gray-600
                                 sm:text-lg
                             "
                         >
@@ -103,6 +124,10 @@ function ForecastCard({ item, weatherIconApi }) {
                     border-t border-gray-100
                     pt-3
                     text-[11px] text-gray-400
+
+                    dark:border-gray-800
+                    dark:text-gray-500
+
                     sm:text-xs
                 "
             >

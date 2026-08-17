@@ -87,8 +87,10 @@ function MobileSearch() {
                 relative overflow-hidden rounded-2xl
                 bg-white shadow-sm
                 transition-all duration-300 ease-out
+                dark:bg-gray-900
+                dark:shadow-none
                 ${isOpen
-                        ? "min-h-84 shadow-md"
+                        ? "min-h-84 shadow-md dark:shadow-black/20"
                         : "min-h-12"
                     }
             `}
@@ -118,10 +120,10 @@ function MobileSearch() {
                     >
                         <Search
                             size={18}
-                            className="shrink-0 text-gray-400"
+                            className="shrink-0 text-gray-400 dark:text-gray-500"
                         />
 
-                        <span className="truncate text-sm font-medium text-gray-800">
+                        <span className="truncate text-sm font-medium text-gray-800 dark:text-gray-200">
                             {currentLocation}
                         </span>
                     </button>
@@ -133,11 +135,17 @@ function MobileSearch() {
                         className="
                         mr-2 flex h-9 w-9 shrink-0
                         items-center justify-center
-                        rounded-full bg-gray-100
+                        rounded-full
+                        bg-gray-100
                         text-gray-500
                         transition
-                        hover:bg-gray-200 hover:text-black
+                        hover:bg-gray-200
+                        hover:text-black
                         active:scale-95
+                        dark:bg-gray-800
+                        dark:text-gray-400
+                        dark:hover:bg-gray-700
+                        dark:hover:text-gray-100
                     "
                     >
                         <LocateFixed size={17} />
@@ -159,7 +167,7 @@ function MobileSearch() {
                     <div className="flex items-center gap-2 px-3 py-2">
                         <Search
                             size={18}
-                            className="shrink-0 text-gray-400"
+                            className="shrink-0 text-gray-400 dark:text-gray-500"
                         />
 
                         <input
@@ -177,6 +185,8 @@ function MobileSearch() {
                             text-sm text-gray-900
                             outline-none
                             placeholder:text-gray-400
+                            dark:text-gray-100
+                            dark:placeholder:text-gray-600
                         "
                         />
 
@@ -187,10 +197,16 @@ function MobileSearch() {
                             className="
                             flex h-8 w-8 shrink-0
                             items-center justify-center
-                            rounded-full bg-gray-100
+                            rounded-full
+                            bg-gray-100
                             text-gray-500
                             transition
-                            hover:bg-gray-200 hover:text-black
+                            hover:bg-gray-200
+                            hover:text-black
+                            dark:bg-gray-800
+                            dark:text-gray-400
+                            dark:hover:bg-gray-700
+                            dark:hover:text-gray-100
                         "
                         >
                             <LocateFixed size={15} />
@@ -209,7 +225,10 @@ function MobileSearch() {
                             rounded-full
                             text-gray-400
                             transition
-                            hover:bg-gray-100 hover:text-black
+                            hover:bg-gray-100
+                            hover:text-black
+                            dark:hover:bg-gray-800
+                            dark:hover:text-gray-100
                         "
                         >
                             <X size={16} />
@@ -221,6 +240,7 @@ function MobileSearch() {
                         className={`
                         border-t border-gray-100
                         transition-all duration-300 delay-75
+                        dark:border-gray-800
                         ${isOpen
                                 ? "translate-y-0 opacity-100"
                                 : "-translate-y-2 opacity-0"
@@ -244,13 +264,16 @@ function MobileSearch() {
                                         transition
                                         hover:bg-gray-50
                                         active:bg-gray-100
+                                        dark:text-gray-300
+                                        dark:hover:bg-gray-800
+                                        dark:active:bg-gray-700
                                     "
                                     >
                                         {city}
                                     </button>
                                 ))
                             ) : (
-                                <p className="px-4 py-4 text-center text-sm text-gray-400">
+                                <p className="px-4 py-4 text-center text-sm text-gray-400 dark:text-gray-600">
                                     No cities found
                                 </p>
                             )}

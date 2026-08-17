@@ -5,9 +5,8 @@ import MobileWeather from "./MobileWeather";
 
 function MobileHome() {
     return (
-        <main className="min-h-screen w-full bg-[#F6F6F8] px-4 py-4 sm:px-6">
+        <main className="min-h-screen w-full bg-[#F6F6F8] px-4 py-4 sm:px-6 dark:bg-gray-950">
             <div className="mx-auto w-full max-w-xl">
-
                 {/* Current Weather */}
                 <section>
                     <MobileWeather />
@@ -27,7 +26,6 @@ function MobileHome() {
                 <section className="mt-6">
                     <TodayHighlights />
                 </section>
-
             </div>
         </main>
     );

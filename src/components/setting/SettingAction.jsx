@@ -19,25 +19,53 @@ function SettingAction({
                 text-left
                 transition
                 hover:bg-gray-50
+                dark:hover:bg-gray-800/60
             "
         >
             <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-500">
+                <div
+                    className="
+                        flex h-8 w-8 shrink-0
+                        items-center justify-center
+                        rounded-xl
+                        bg-gray-50 text-gray-500
+                        dark:bg-gray-800
+                        dark:text-gray-400
+                    "
+                >
                     <Icon size={15} />
                 </div>
 
                 <div className="min-w-0">
-                    <p className="text-xs font-medium text-gray-800">
+                    <p
+                        className="
+                            text-xs font-medium
+                            text-gray-800
+                            dark:text-gray-100
+                        "
+                    >
                         {label}
                     </p>
 
-                    <p className="mt-0.5 truncate text-[10px] text-gray-400">
+                    <p
+                        className="
+                            mt-0.5 truncate
+                            text-[10px]
+                            text-gray-400
+                            dark:text-gray-500
+                        "
+                    >
                         {description}
                     </p>
                 </div>
             </div>
 
-            <span className="text-xs text-gray-300">
+            <span
+                className="
+                    text-xs text-gray-300
+                    dark:text-gray-600
+                "
+            >
                 →
             </span>
         </button>

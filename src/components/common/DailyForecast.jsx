@@ -17,11 +17,11 @@ function DailyForecast() {
         <section className="w-full">
             {/* Heading */}
             <div className="mb-4 sm:mb-5">
-                <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 sm:text-2xl">
                     5-Day Forecast
                 </h2>
 
-                <p className="mt-1 text-xs text-gray-400 sm:text-sm">
+                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 sm:text-sm">
                     Weather forecast for the next five days
                 </p>
             </div>
@@ -29,23 +29,23 @@ function DailyForecast() {
             {/* Scrollable forecast */}
             <div
                 className="
-                    flex w-full gap-3
-                    overflow-x-auto
-                    pb-2
-                    snap-x snap-mandatory
-                    scrollbar-none
-                    sm:gap-4
-                "
+                flex w-full gap-3
+                overflow-x-auto
+                pb-2
+                snap-x snap-mandatory
+                scrollbar-none
+                sm:gap-4
+            "
             >
                 {forecastData.map((item) => (
                     <div
                         key={item.date}
                         className="
-                            w-40 shrink-0 snap-start
-                            sm:w-48
-                            lg:w-[calc((100%-4rem)/5)]
-                            lg:shrink-0
-                        "
+                        w-40 shrink-0 snap-start
+                        sm:w-48
+                        lg:w-[calc((100%-4rem)/5)]
+                        lg:shrink-0
+                    "
                     >
                         <ForecastCard
                             item={item}

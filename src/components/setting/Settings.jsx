@@ -32,8 +32,15 @@ function Settings() {
     }, [showSettings]);
 
     useEffect(() => {
-        localStorage.setItem("weatherapp-dark-mode", String(darkMode));
-        document.documentElement.classList.toggle("dark", darkMode);
+        localStorage.setItem(
+            "weatherapp-dark-mode",
+            String(darkMode)
+        );
+
+        document.documentElement.classList.toggle(
+            "dark",
+            darkMode
+        );
     }, [darkMode]);
 
     useEffect(() => {
@@ -56,17 +63,33 @@ function Settings() {
     }, [isOpen]);
 
     return (
-        <div ref={settingsRef} className="group fixed bottom-15 right-4 z-50">
+        <div
+            ref={settingsRef}
+            className="group fixed bottom-15 right-4 z-50"
+        >
             {/* Settings Panel */}
             {isOpen && (
-                <div className="absolute bottom-14 right-0 w-72 rounded-3xl border border-gray-100 bg-white p-4 shadow-[0_15px_50px_rgba(0,0,0,0.12)]">
+                <div
+                    className="
+                    absolute bottom-14 right-0 w-72
+                    rounded-3xl
+                    border border-gray-100
+                    bg-white
+                    p-4
+                    shadow-[0_15px_50px_rgba(0,0,0,0.12)]
+                    dark:border-gray-700
+                    dark:bg-gray-900
+                    dark:shadow-[0_15px_50px_rgba(0,0,0,0.4)]
+                "
+                >
                     {/* Header */}
                     <div className="mb-4 flex items-center justify-between">
                         <div>
-                            <h2 className="text-sm font-semibold text-gray-900">
+                            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                 Settings
                             </h2>
-                            <p className="mt-0.5 text-[11px] text-gray-400">
+
+                            <p className="mt-0.5 text-[11px] text-gray-400 dark:text-gray-500">
                                 Customize your weather app
                             </p>
                         </div>
@@ -74,7 +97,17 @@ function Settings() {
                         <button
                             type="button"
                             onClick={() => setIsOpen(false)}
-                            className="rounded-full p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+                            className="
+                            rounded-full
+                            p-1.5
+                            text-gray-400
+                            transition
+                            hover:bg-gray-100
+                            hover:text-gray-700
+                            dark:text-gray-500
+                            dark:hover:bg-gray-800
+                            dark:hover:text-gray-200
+                        "
                             aria-label="Close settings"
                         >
                             <X size={15} />
@@ -90,6 +123,7 @@ function Settings() {
                             enabled={showSettings}
                             onChange={setShowSettings}
                         />
+
                         <SettingToggle
                             icon={Moon}
                             label="Dark mode"
@@ -110,6 +144,7 @@ function Settings() {
                                 setIsClockOpen(true);
                             }}
                         />
+
                         <SettingAction
                             icon={Timer}
                             label="Timer"
@@ -123,12 +158,14 @@ function Settings() {
                 </div>
             )}
 
+            {/* Clock */}
             {isClockOpen && (
                 <Clock
                     onClose={() => setIsClockOpen(false)}
                 />
             )}
 
+            {/* Timer */}
             {isTimerOpen && (
                 <TimerPopup
                     onClose={() => setIsTimerOpen(false)}
@@ -139,19 +176,46 @@ function Settings() {
             <button
                 type="button"
                 onClick={() => setIsOpen((open) => !open)}
-                className={`flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-500 shadow-sm backdrop-blur transition-all duration-300 hover:scale-105 hover:text-gray-900 hover:shadow-md ${showSettings
-                    ? "opacity-100 translate-y-0"
-                    : "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
-                    }`}
+                className={`
+                flex h-11 w-11
+                items-center justify-center
+                rounded-full
+                border border-gray-200
+                bg-white/90
+                text-gray-500
+                shadow-sm
+                backdrop-blur
+                transition-all
+                duration-300
+                hover:scale-105
+                hover:text-gray-900
+                hover:shadow-md
+
+                dark:border-gray-700
+                dark:bg-gray-900/90
+                dark:text-gray-400
+                dark:hover:bg-gray-800
+                dark:hover:text-gray-100
+
+                ${showSettings
+                        ? "translate-y-0 opacity-100"
+                        : "pointer-events-none translate-y-2 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+                    }
+            `}
                 aria-label="Open settings"
             >
                 <SettingsIcon
                     size={18}
-                    className="transition-transform duration-300 hover:rotate-45"
+                    className="
+                    transition-transform
+                    duration-300
+                    hover:rotate-45
+                "
                 />
             </button>
         </div>
     );
+
 }
 
 export default Settings;

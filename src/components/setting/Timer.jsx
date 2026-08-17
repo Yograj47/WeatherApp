@@ -93,30 +93,31 @@ function Timer({ onClose }) {
         displayMinutes
     ).padStart(2, "0")}:${String(
         displaySeconds
-    ).padStart(2, "0")}`;
-
-    return (
+    ).padStart(2, "0")}`; return (
         <div
             className="
-                absolute
-                bottom-14
-                right-0
-                w-72
-                rounded-3xl
-                border border-gray-100
-                bg-white
-                p-5
-                shadow-[0_15px_50px_rgba(0,0,0,0.12)]
-            "
+            absolute
+            bottom-14
+            right-0
+            w-72
+            rounded-3xl
+            border border-gray-100
+            bg-white
+            p-5
+            shadow-[0_15px_50px_rgba(0,0,0,0.12)]
+            dark:border-gray-800
+            dark:bg-gray-900
+            dark:shadow-[0_15px_50px_rgba(0,0,0,0.35)]
+        "
         >
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-sm font-semibold text-gray-900">
+                    <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                         Timer
                     </h2>
 
-                    <p className="mt-0.5 text-[11px] text-gray-400">
+                    <p className="mt-0.5 text-[11px] text-gray-400 dark:text-gray-500">
                         Set a countdown
                     </p>
                 </div>
@@ -125,13 +126,15 @@ function Timer({ onClose }) {
                     type="button"
                     onClick={onClose}
                     className="
-                        rounded-full
-                        p-1.5
-                        text-gray-400
-                        transition
-                        hover:bg-gray-100
-                        hover:text-gray-700
-                    "
+                    rounded-full
+                    p-1.5
+                    text-gray-400
+                    transition
+                    hover:bg-gray-100
+                    hover:text-gray-700
+                    dark:hover:bg-gray-800
+                    dark:hover:text-gray-200
+                "
                     aria-label="Close timer"
                 >
                     <X size={15} />
@@ -142,21 +145,20 @@ function Timer({ onClose }) {
             <div className="mt-6 text-center">
                 <span
                     className={`
-                        text-5xl
-                        font-light
-                        tracking-tight
-                        ${
-                            isFinished
-                                ? "text-gray-300"
-                                : "text-gray-900"
+                    text-5xl
+                    font-light
+                    tracking-tight
+                    ${isFinished
+                            ? "text-gray-300 dark:text-gray-600"
+                            : "text-gray-900 dark:text-gray-100"
                         }
-                    `}
+                `}
                 >
                     {formattedTime}
                 </span>
 
                 {isFinished && (
-                    <p className="mt-2 text-xs font-medium text-gray-400">
+                    <p className="mt-2 text-xs font-medium text-gray-400 dark:text-gray-500">
                         Timer finished
                     </p>
                 )}
@@ -173,30 +175,35 @@ function Timer({ onClose }) {
                             value={minutes}
                             onChange={handleMinutesChange}
                             className="
-                                h-10
-                                w-16
-                                rounded-xl
-                                border
-                                border-gray-200
-                                bg-gray-50
-                                text-center
-                                text-sm
-                                font-medium
-                                text-gray-900
-                                outline-none
-                                transition
-                                focus:border-gray-400
-                                focus:bg-white
-                            "
+                            h-10
+                            w-16
+                            rounded-xl
+                            border
+                            border-gray-200
+                            bg-gray-50
+                            text-center
+                            text-sm
+                            font-medium
+                            text-gray-900
+                            outline-none
+                            transition
+                            focus:border-gray-400
+                            focus:bg-white
+                            dark:border-gray-700
+                            dark:bg-gray-800
+                            dark:text-gray-100
+                            dark:focus:border-gray-600
+                            dark:focus:bg-gray-800
+                        "
                             aria-label="Minutes"
                         />
 
-                        <p className="mt-1 text-[10px] text-gray-400">
+                        <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">
                             min
                         </p>
                     </div>
 
-                    <span className="mb-4 text-gray-300">
+                    <span className="mb-4 text-gray-300 dark:text-gray-600">
                         :
                     </span>
 
@@ -208,25 +215,30 @@ function Timer({ onClose }) {
                             value={seconds}
                             onChange={handleSecondsChange}
                             className="
-                                h-10
-                                w-16
-                                rounded-xl
-                                border
-                                border-gray-200
-                                bg-gray-50
-                                text-center
-                                text-sm
-                                font-medium
-                                text-gray-900
-                                outline-none
-                                transition
-                                focus:border-gray-400
-                                focus:bg-white
-                            "
+                            h-10
+                            w-16
+                            rounded-xl
+                            border
+                            border-gray-200
+                            bg-gray-50
+                            text-center
+                            text-sm
+                            font-medium
+                            text-gray-900
+                            outline-none
+                            transition
+                            focus:border-gray-400
+                            focus:bg-white
+                            dark:border-gray-700
+                            dark:bg-gray-800
+                            dark:text-gray-100
+                            dark:focus:border-gray-600
+                            dark:focus:bg-gray-800
+                        "
                             aria-label="Seconds"
                         />
 
-                        <p className="mt-1 text-[10px] text-gray-400">
+                        <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">
                             sec
                         </p>
                     </div>
@@ -247,23 +259,28 @@ function Timer({ onClose }) {
                         remainingSeconds <= 0
                     }
                     className="
-                        flex
-                        h-10
-                        flex-1
-                        items-center
-                        justify-center
-                        gap-2
-                        rounded-xl
-                        bg-gray-900
-                        text-xs
-                        font-medium
-                        text-white
-                        transition
-                        hover:bg-gray-800
-                        disabled:cursor-not-allowed
-                        disabled:bg-gray-200
-                        disabled:text-gray-400
-                    "
+                    flex
+                    h-10
+                    flex-1
+                    items-center
+                    justify-center
+                    gap-2
+                    rounded-xl
+                    bg-gray-900
+                    text-xs
+                    font-medium
+                    text-white
+                    transition
+                    hover:bg-gray-800
+                    disabled:cursor-not-allowed
+                    disabled:bg-gray-200
+                    disabled:text-gray-400
+                    dark:bg-gray-100
+                    dark:text-gray-900
+                    dark:hover:bg-white
+                    dark:disabled:bg-gray-800
+                    dark:disabled:text-gray-600
+                "
                 >
                     {isRunning ? (
                         <>
@@ -273,7 +290,7 @@ function Timer({ onClose }) {
                     ) : (
                         <>
                             <Play size={14} />
-                            {isFinished ? "Start" : "Start"}
+                            Start
                         </>
                     )}
                 </button>
@@ -282,20 +299,24 @@ function Timer({ onClose }) {
                     type="button"
                     onClick={handleReset}
                     className="
-                        flex
-                        h-10
-                        w-10
-                        shrink-0
-                        items-center
-                        justify-center
-                        rounded-xl
-                        border
-                        border-gray-200
-                        text-gray-500
-                        transition
-                        hover:bg-gray-50
-                        hover:text-gray-900
-                    "
+                    flex
+                    h-10
+                    w-10
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    border
+                    border-gray-200
+                    text-gray-500
+                    transition
+                    hover:bg-gray-50
+                    hover:text-gray-900
+                    dark:border-gray-700
+                    dark:text-gray-400
+                    dark:hover:bg-gray-800
+                    dark:hover:text-gray-100
+                "
                     aria-label="Reset timer"
                 >
                     <RotateCcw size={14} />

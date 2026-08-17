@@ -34,8 +34,16 @@ function Sidebar() {
 
     return (
         <aside className="h-full min-h-0 p-5">
-            <div className="flex h-full min-h-0 flex-col gap-6 rounded-3xl bg-white p-5 shadow-sm">
-
+            <div
+                className="
+                flex h-full min-h-0 flex-col gap-6
+                rounded-3xl
+                bg-white p-5
+                shadow-sm
+                dark:border-gray-800
+                dark:bg-gray-900
+            "
+            >
                 {/* Search */}
                 <section className="shrink-0">
                     <DesktopSearch />
@@ -44,14 +52,13 @@ function Sidebar() {
                 {/* Current Weather */}
                 <section className="shrink-0">
                     <div className="flex flex-col items-center text-center">
-
                         <div>
-                            <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+                            <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
                                 {cityName}
                             </h2>
 
                             {country && (
-                                <p className="mt-1 text-xs text-gray-400">
+                                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                                     {country}
                                 </p>
                             )}
@@ -69,22 +76,22 @@ function Sidebar() {
                         </div>
 
                         <div className="flex items-start justify-center">
-                            <span className="text-6xl font-extralight leading-none tracking-tight text-gray-900">
+                            <span className="text-6xl font-extralight leading-none tracking-tight text-gray-900 dark:text-gray-100">
                                 {Math.round(
                                     weather.temperature.current
                                 )}
                             </span>
 
-                            <span className="mt-1 text-xl font-light text-gray-500">
+                            <span className="mt-1 text-xl font-light text-gray-500 dark:text-gray-400">
                                 °C
                             </span>
                         </div>
 
-                        <p className="mt-2 text-xs text-gray-400">
+                        <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
                             Feels like {feelsLike}°C
                         </p>
 
-                        <p className="mt-3 text-sm font-medium capitalize text-gray-800">
+                        <p className="mt-3 text-sm font-medium capitalize text-gray-800 dark:text-gray-200">
                             {currentDescription}
                         </p>
                     </div>
@@ -92,13 +99,12 @@ function Sidebar() {
 
                 {/* Hourly Forecast */}
                 <section className="flex min-h-0 flex-1 flex-col">
-
                     <div className="mb-3 shrink-0">
-                        <h3 className="text-base font-semibold text-gray-900">
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                             Hourly Forecast
                         </h3>
 
-                        <p className="mt-1 text-xs text-gray-400">
+                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                             Next 24 hours
                         </p>
                     </div>
@@ -108,9 +114,7 @@ function Sidebar() {
                             {hourlyEntries.map(
                                 (entry, index) => (
                                     <HourlyItem
-                                        key={
-                                            entry.timestamp
-                                        }
+                                        key={entry.timestamp}
                                         entry={entry}
                                         index={index}
                                         weatherIconApi={
@@ -128,6 +132,7 @@ function Sidebar() {
             </div>
         </aside>
     );
+
 }
 
 function HourlyItem({
@@ -143,7 +148,7 @@ function HourlyItem({
 
     const temperature =
         entry.temperature?.current !== null &&
-        entry.temperature?.current !== undefined
+            entry.temperature?.current !== undefined
             ? Math.round(
                 entry.temperature.current
             )
@@ -155,7 +160,7 @@ function HourlyItem({
 
     const windSpeed =
         entry.wind?.speed !== null &&
-        entry.wind?.speed !== undefined
+            entry.wind?.speed !== undefined
             ? (
                 entry.wind.speed * 3.6
             ).toFixed(1)
@@ -174,11 +179,11 @@ function HourlyItem({
 
     const windDirection =
         entry.wind?.direction !== null &&
-        entry.wind?.direction !== undefined
+            entry.wind?.direction !== undefined
             ? windDirections[
-                Math.round(
-                    entry.wind.direction / 45
-                ) % 8
+            Math.round(
+                entry.wind.direction / 45
+            ) % 8
             ]
             : null;
 
@@ -187,28 +192,25 @@ function HourlyItem({
     return (
         <article
             className={`
-                rounded-2xl px-3 py-3
-                transition-colors duration-200
-                ${
-                    isCurrent
-                        ? "bg-gray-700 text-white"
-                        : "bg-gray-50 text-gray-900"
+            rounded-2xl px-3 py-3
+            transition-colors duration-200
+            ${isCurrent
+                    ? "bg-gray-700 text-white dark:bg-gray-700"
+                    : "bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
                 }
-            `}
+        `}
         >
             <div className="flex items-center justify-between gap-3">
-
                 {/* Time + icon */}
                 <div className="flex min-w-0 items-center gap-3">
                     <span
                         className={`
-                            w-12 shrink-0 text-xs font-semibold
-                            ${
-                                isCurrent
-                                    ? "text-white"
-                                    : "text-gray-500"
+                        w-12 shrink-0 text-xs font-semibold
+                        ${isCurrent
+                                ? "text-white"
+                                : "text-gray-500 dark:text-gray-400"
                             }
-                        `}
+                    `}
                     >
                         {isCurrent ? "Now" : time}
                     </span>
@@ -216,8 +218,7 @@ function HourlyItem({
                     <img
                         src={`${weatherIconApi}/${entry.condition?.icon}@2x.png`}
                         alt={
-                            entry.condition
-                                ?.description ||
+                            entry.condition?.description ||
                             "Weather icon"
                         }
                         className="h-9 w-9 shrink-0 object-contain"
@@ -225,16 +226,14 @@ function HourlyItem({
 
                     <span
                         className={`
-                            min-w-0 truncate text-xs capitalize
-                            ${
-                                isCurrent
-                                    ? "text-gray-300"
-                                    : "text-gray-500"
+                        min-w-0 truncate text-xs capitalize
+                        ${isCurrent
+                                ? "text-gray-300"
+                                : "text-gray-500 dark:text-gray-400"
                             }
-                        `}
+                    `}
                     >
-                        {entry.condition
-                            ?.description ||
+                        {entry.condition?.description ||
                             "Unknown"}
                     </span>
                 </div>
@@ -242,13 +241,12 @@ function HourlyItem({
                 {/* Temperature */}
                 <span
                     className={`
-                        shrink-0 text-sm font-semibold
-                        ${
-                            isCurrent
-                                ? "text-white"
-                                : "text-gray-800"
+                    shrink-0 text-sm font-semibold
+                    ${isCurrent
+                            ? "text-white"
+                            : "text-gray-800 dark:text-gray-100"
                         }
-                    `}
+                `}
                 >
                     {temperature !== null
                         ? `${temperature}°`
@@ -259,15 +257,14 @@ function HourlyItem({
             {/* Secondary details */}
             <div
                 className={`
-                    mt-2 flex items-center justify-end
-                    gap-3 border-t pt-2
-                    text-[10px]
-                    ${
-                        isCurrent
-                            ? "border-gray-700 text-gray-400"
-                            : "border-gray-200 text-gray-400"
+                mt-2 flex items-center justify-end
+                gap-3 border-t pt-2
+                text-[10px]
+                ${isCurrent
+                        ? "border-gray-700 text-gray-400"
+                        : "border-gray-200 text-gray-400 dark:border-gray-700 dark:text-gray-500"
                     }
-                `}
+            `}
             >
                 <span>
                     Rain {precipitation}%
