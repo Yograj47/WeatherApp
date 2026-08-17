@@ -7,14 +7,13 @@ import {
 } from "lucide-react";
 
 import useWeatherStore from "../../stores/weatherStore";
-
 import {
     getSunData,
     getWindData,
     getHumidityLabel,
     getVisibilityData,
     getCloudinessLabel,
-} from "../../utils/TodayHighlights";
+} from "../../utils/TodayHighLights";
 
 export default function TodayHighlights() {
     const { weather } = useWeatherStore();
