@@ -15,8 +15,8 @@ function MobileWeather() {
         weather.timezone
     );
 
-    const currentIcon = weather.condition.icon;
-    const currentDescription = weather.condition.description;
+    const currentIcon = weather?.condition?.icon;
+    const currentDescription = weather?.condition?.description;
 
     const windSpeed = (
         weather.wind.speed * 3.6
